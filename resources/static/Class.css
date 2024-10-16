@@ -1,0 +1,38 @@
+.flex {
+    display: flex;
+}
+.gap-3 {
+    gap: 0.75rem;
+}
+.p-3 {
+    padding: 0.75rem;
+}
+.font-bold {
+    font-weight: bold;
+}
+.font-medium {
+    font-weight: 500;
+}
+.border-blue-500 {
+    border-color: #3b82f6;
+}
+.bg-blue-500 {
+    background-color: #3b82f6;
+}
+.h-2 {
+    height: 0.5rem;
+}
+.rounded-t-xl {
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+}
+.cursor-pointer {
+    cursor: pointer;
+}
+.absolute {
+    position: absolute;
+}
+.relative {
+    position: relative;
+}
+
