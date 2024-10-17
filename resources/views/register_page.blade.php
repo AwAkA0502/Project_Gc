@@ -74,14 +74,28 @@
         .login-link a:hover {
             text-decoration: underline;
         }
+        .alert {
+            color: red;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
 
     <div class="registration-container">
-        <section id="welcome-message">
-            <h2>Welcome to the Registration Session</h2>
-        </section>
+        <h2>Welcome to the Registration Session</h2>
+        
+        @if ($errors->any())
+            <div class="alert">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        
         <form method="POST" action="{{ route('register') }}">
             @csrf
             <div class="form-group">

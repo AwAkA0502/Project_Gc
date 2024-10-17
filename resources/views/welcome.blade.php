@@ -40,9 +40,10 @@
   </head>
   <body class="bg-gray-200 w-full h-screen">
     <video autoplay muted loop class="background-video">
-        <source src="{{ asset('static/assets/p.mp4') }}" type="video/mp4" />
-        Browser Anda tidak mendukung video HTML5.
+      <source src="{{ asset('assets/p.mp4') }}" type="video/mp4">
+      Browser Anda tidak mendukung video HTML5.
     </video>
+
     <div class="content-container">
       <div class="content text-center">
         <h1 class="font-bold text-4xl">Proyek Java</h1>

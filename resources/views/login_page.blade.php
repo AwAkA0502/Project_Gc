@@ -24,6 +24,18 @@
             <h1 class="font-semibold text-3xl">Login</h1>
             <p class="text-lg">Selamat datang bree</p>
         </div>
+        
+        <!-- Menampilkan pesan error jika ada -->
+        @if ($errors->any())
+            <div class="mb-4 text-red-500">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <form method="POST" action="{{ route('login') }}">
             @csrf
             <div class="flex flex-col gap-1">
@@ -59,6 +71,18 @@
                 passwordField.type = 'text';
             } else {
                 passwordField.type = 'password';
+            }
+        }
+        function login() {
+            const passwordInput = document.getElementById('passwordInput').value; // Ambil password dari input
+            const correctPassword = "your_correct_password"; // Ganti dengan password yang benar
+
+            if (passwordInput === correctPassword) {
+        // Arahkan ke halaman utama jika password benar
+                window.location.href = "home_page.html"; // Ganti dengan halaman utama Anda
+            } else {
+        // Arahkan ke halaman error jika password salah
+                window.location.href = "error_page.html"; // Ganti dengan nama file error_page Anda
             }
         }
     </script>

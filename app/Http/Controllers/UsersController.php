@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
@@ -23,19 +24,22 @@ class UsersController extends Controller
     // Proses registrasi pengguna
     public function register(Request $request)
     {
+        // Validasi input
         $request->validate([
-            'login' => 'required|string|max:255|unique:users',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
+            'login' => 'required|unique:users,login',
+            'password' => 'required|min:6',
+            'email' => 'required|email|unique:users,email',
         ]);
 
-        $user = new User();
-        $user->login = $request->login;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
+        // Buat pengguna baru
+        $user = new User;
+        $user->login = $request->input('login');
+        $user->password = bcrypt($request->input('password')); // Enkripsi password
+        $user->email = $request->input('email');
         $user->save();
 
-        return redirect()->route('login_page')->with('success', 'User registered successfully');
+        // Redirect ke halaman login atau halaman lain sesuai kebutuhan
+        return redirect()->route('login_page')->with('success', 'Registration successful! Please log in.');
     }
 
     // Proses login pengguna
@@ -46,13 +50,19 @@ class UsersController extends Controller
             'password' => 'required|string',
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        // Mencari pengguna berdasarkan email
+        $user = User::where('email', $request->input('email'))->first();
 
-        if ($user && Hash::check($request->password, $user->password)) {
-            return view('personal_page', ['userLogin' => $user->login]);
+        // Periksa jika pengguna ditemukan dan password cocok
+        if ($user && Hash::check($request->input('password'), $user->password)) {
+            // Login sukses, set autentikasi
+            Auth::login($user); // Menambahkan autentikasi pengguna
+            // Redirect ke halaman personal
+            return redirect()->route('personal_page'); // Mengarahkan ke rute halaman personal
         }
 
-        return view('error_page')->withErrors(['message' => 'Invalid credentials']);
+        // Jika login gagal, kembali ke halaman login dengan pesan error
+        return back()->withErrors(['message' => 'Invalid credentials']);
     }
 
     // Menampilkan halaman ganti password
@@ -70,16 +80,17 @@ class UsersController extends Controller
             'new_password' => 'required|string|min:8',
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->input('email'))->first();
 
-        if ($user && Hash::check($request->old_password, $user->password)) {
-            $user->password = Hash::make($request->new_password);
+        if ($user && Hash::check($request->input('old_password'), $user->password)) {
+            // Enkripsi password baru dan simpan
+            $user->password = bcrypt($request->input('new_password'));
             $user->save();
 
             return redirect()->route('login_page')->with('success', 'Password changed successfully');
         }
 
-        return view('error_page')->withErrors(['message' => 'Invalid credentials']);
+        return back()->withErrors(['message' => 'Invalid credentials']);
     }
 
     // Menampilkan halaman kelas
@@ -97,6 +108,7 @@ class UsersController extends Controller
     // Menampilkan halaman personal setelah login
     public function getPersonalPage()
     {
-        return view('personal_page');
+        // Mengirimkan data pengguna yang sedang login ke halaman personal
+        return view('personal_page', ['user' => Auth::user()]); // Menggunakan Auth::user()
     }
 }

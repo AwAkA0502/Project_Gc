@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
+use Illuminate\Support\Facades\Auth;
 
 // Route untuk halaman welcome (default)
 Route::get('/', function () {
@@ -32,4 +33,16 @@ Route::get('/error', function () {
 })->name('error_page');
 
 // Route untuk halaman personal
-Route::get('/personal', [UsersController::class, 'getPersonalPage'])->name('personal_page');
+Route::get('/personal', [UsersController::class, 'getPersonalPage'])->middleware('auth')->name('personal_page');
+
+// Route untuk menampilkan video
+Route::get('/video', function () {
+    $path = resource_path('assets/p.mp4');
+    return response()->file($path);
+})->name('video');
+
+// Route untuk logout
+Route::post('/logout', function () {
+    Auth::logout(); // Logout pengguna
+    return redirect()->route('login_page')->with('success', 'Logout successful!');
+})->name('logout'); // Menambahkan rute logout
