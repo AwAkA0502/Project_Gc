@@ -8,17 +8,17 @@ class CreateUsersTable extends Migration
 {
     public function up()
     {
-        Schema::create('users_table', function (Blueprint $table) {
-            $table->id(); // Kolom id auto increment
-            $table->string('login')->unique(); // Kolom login
-            $table->string('password'); // Kolom password
-            $table->string('email')->unique(); // Kolom email
-            $table->timestamps(); // Kolom created_at dan updated_at
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('login')->unique();
+            $table->string('password');
+            $table->string('email')->unique();
+            $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('users_table');
+        Schema::dropIfExists('users');
     }
 }

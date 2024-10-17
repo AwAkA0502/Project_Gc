@@ -100,7 +100,7 @@
                 <input class="submit-btn" type="submit" value="Register">
             </div>
             <div class="login-link">
-                <p>Already registered? <a href="{{ route('login_page') }}">Login here</a></p>
+                <p>Already registered? <a href="{{ route('login') }}">Login here</a></p>
             </div>
         </form>
     </div>

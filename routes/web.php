@@ -17,7 +17,7 @@ Route::get('/login', [UsersController::class, 'getLoginPage'])->name('login_page
 Route::post('/login', [UsersController::class, 'login'])->name('login');
 
 // Route untuk halaman kelas (Class)
-Route::get('/class', [UsersController::class, 'getClassPage'])->name('class_page');
+Route::get('/class', [UsersController::class, 'welcome'])->name('class_page');
 
 // Route untuk halaman tugas (TaskPage)
 Route::get('/task-page', [UsersController::class, 'viewTaskPage'])->name('task_page');

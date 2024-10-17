@@ -85,13 +85,13 @@ class UsersController extends Controller
     // Menampilkan halaman kelas
     public function welcome()
     {
-        return view('class-page');
+        return view('class_page');
     }
 
     // Menampilkan halaman tugas
     public function viewTaskPage()
     {
-        return view('task-page');
+        return view('task_page');
     }
 
     // Menampilkan halaman personal setelah login

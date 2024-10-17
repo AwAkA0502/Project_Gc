@@ -42,12 +42,12 @@
         </form>
         <div class="flex flex-col items-center mt-5">
             <p>
-                gak punya akun?
-                <a href="{{ route('register_page') }}" class="text-blue-600">Daftar Disini</a>
+                Gak punya akun?
+                <a href="{{ route('register') }}" class="text-blue-600">Daftar Disini</a>
             </p>
             <p class="mt-2">
                 Ganti password?
-                <a href="{{ route('change_password_page') }}" class="text-blue-600">Ganti Password</a>
+                <a href="{{ route('change_password') }}" class="text-blue-600">Ganti Password</a>
             </p>
         </div>
     </div>
