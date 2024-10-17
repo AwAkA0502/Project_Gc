@@ -23,4 +23,10 @@ class User extends Authenticatable // Menggunakan Authenticatable sebagai kelas 
     {
         return $this->password;
     }
+
+    public function classes()
+{
+    return $this->belongsToMany(ClassModel::class);
+}
+
 }

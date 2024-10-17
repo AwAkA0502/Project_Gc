@@ -38,7 +38,7 @@ class UsersController extends Controller
         $user->email = $request->input('email');
         $user->save();
 
-        // Redirect ke halaman login atau halaman lain sesuai kebutuhan
+        // Redirect ke halaman login
         return redirect()->route('login_page')->with('success', 'Registration successful! Please log in.');
     }
 
@@ -96,7 +96,9 @@ class UsersController extends Controller
     // Menampilkan halaman kelas
     public function welcome()
     {
-        return view('class_page');
+        // Mengirimkan data login pengguna
+        $userLogin = Auth::user() ? Auth::user()->login : 'Pengguna Tidak Terdaftar';
+        return view('class_page', ['userLogin' => $userLogin]); 
     }
 
     // Menampilkan halaman tugas
@@ -109,6 +111,7 @@ class UsersController extends Controller
     public function getPersonalPage()
     {
         // Mengirimkan data pengguna yang sedang login ke halaman personal
-        return view('personal_page', ['user' => Auth::user()]); // Menggunakan Auth::user()
+        $userLogin = Auth::user() ? Auth::user()->login : 'Pengguna Tidak Terdaftar';
+        return view('personal_page', ['userLogin' => $userLogin]); // Menyediakan variabel userLogin
     }
 }
