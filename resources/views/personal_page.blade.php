@@ -189,100 +189,105 @@
 
         <script>
     // Sidebar toggle function
-          function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('sidebar-hidden');
-            sidebar.classList.toggle('sidebar-visible');
-          }
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('sidebar-hidden');
+        sidebar.classList.toggle('sidebar-visible');
+    }
 
     // Modal toggle function
-          function toggleModal(type) {
-            const joinModal = document.getElementById('joinModal');
-            const createModal = document.getElementById('createModal');
-            if (type === 'join') {
-              joinModal.classList.toggle('hidden');
-            } else if (type === 'create') {
+    function toggleModal(type) {
+        const joinModal = document.getElementById('joinModal');
+        const createModal = document.getElementById('createModal');
+
+        if (type === 'join') {
+            joinModal.classList.toggle('hidden');
+        } else if (type === 'create') {
             createModal.classList.toggle('hidden');
-            }
-          }
+        }
+    }
 
     // Calendar show/hide function
-          function showCalendar() {
-            const calendarDiv = document.getElementById('calendar');
-            calendarDiv.classList.toggle('hidden');
-            if (!calendarDiv.classList.contains('hidden')) {
-              initializeCalendar();
-            }
-          }
+    function showCalendar() {
+        const calendarDiv = document.getElementById('calendar');
+        calendarDiv.classList.toggle('hidden');
+
+        if (!calendarDiv.classList.contains('hidden')) {
+            initializeCalendar();
+        }
+    }
 
     // Initialize FullCalendar
-          function initializeCalendar() {
-            const calendarEl = document.getElementById('calendar');
-            new FullCalendar.Calendar(calendarEl, {
-              initialView: 'dayGridMonth',
-              headerToolbar: {
+    function initializeCalendar() {
+        const calendarEl = document.getElementById('calendar');
+        new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
-              },
-              editable: true,
-              selectable: true,
-              events: [
+            },
+            editable: true,
+            selectable: true,
+            events: [
                 {
-                  title: 'Meeting',
-                  start: '2024-08-30T10:00:00',
-                  end: '2024-08-30T12:00:00'
+                    title: 'Meeting',
+                    start: '2024-08-30T10:00:00',
+                    end: '2024-08-30T12:00:00'
                 }
-              ]
-            }).render();
-          }
+            ]
+        }).render();
+    }
 
-    // Load classes
-          function loadClasses() {
-            fetch('/api/classes/all')
-              .then(response => response.json())
-              .then(data => {
+    // Load classes from API
+    function loadClasses() {
+        fetch('/api/classes/all')
+            .then(response => response.json())
+            .then(data => {
                 const classList = document.getElementById('classList');
-                classList.innerHTML = '';
-                data.forEach(classModel => {
-                  const classCard = document.createElement('div');
-                  classCard.className = 'class-card bg-white p-4 rounded shadow-md';
-                  classCard.innerHTML = `
-                    <h2 class="text-xl font-semibold">${classModel.className}</h2>
-                    <p class="text-gray-600">${classModel.subjectName}</p>
-                    <p class="text-gray-600">${classModel.classCode}</p>
-                    <button class="delete-button" onclick="deleteClass('${classModel.classCode}')">Hapus</button>
-                  `;
-                  classCard.onclick = (event) => {
-                    if (!event.target.classList.contains('delete-button')) {
-                      window.location.href = 'Class';
-                    }
-                  };
-                  classList.appendChild(classCard);
-                });
-              });
-          }
+                classList.innerHTML = ''; // Clear existing class list
 
-    // Join class
-          function joinClass() {
-            const classCode = document.getElementById('joinClassCode').value;
-            fetch(`/api/classes/join/${classCode}`)
-              .then(response => response.json())
-              .then(data => {
+                data.forEach(classModel => {
+                    const classCard = document.createElement('div');
+                    classCard.className = 'class-card bg-white p-4 rounded shadow-md';
+                    classCard.innerHTML = `
+                        <h2 class="text-xl font-semibold">${classModel.className}</h2>
+                        <p class="text-gray-600">${classModel.subjectName}</p>
+                        <p class="text-gray-600">${classModel.classCode}</p>
+                        <button class="delete-button" onclick="deleteClass('${classModel.classCode}')">Hapus</button>
+                    `;
+                    classCard.onclick = (event) => {
+                        if (!event.target.classList.contains('delete-button')) {
+                            window.location.href = 'Class'; // Redirect to class page
+                        }
+                    };
+                    classList.appendChild(classCard);
+                });
+            });
+    }
+
+    // Join a class using class code
+    function joinClass() {
+        const classCode = document.getElementById('joinClassCode').value;
+
+        fetch(`/api/classes/join/${classCode}`)
+            .then(response => response.json())
+            .then(data => {
                 if (data.success) {
                     alert('Berhasil gabung kelas!');
-                    loadClasses();
-                    toggleModal('join');
+                    loadClasses(); // Refresh class list
+                    toggleModal('join'); // Close join modal
                 } else {
                     alert('Kode kelas tidak valid!');
                 }
-              });
-          }
+            });
+    }
 
-    // Create class
+    // Create a new class
     function createClass() {
         const className = document.getElementById('createClassName').value;
         const subjectName = document.getElementById('subjectName').value;
+
         fetch('/api/classes/create', {
             method: 'POST',
             headers: {
@@ -294,15 +299,15 @@
         .then(data => {
             if (data.success) {
                 alert('Kelas berhasil dibuat!');
-                loadClasses();
-                toggleModal('create');
+                loadClasses(); // Refresh class list
+                toggleModal('create'); // Close create modal
             } else {
                 alert('Gagal membuat kelas!');
             }
         });
     }
 
-    // Delete class
+    // Delete a class using class code
     function deleteClass(classCode) {
         if (confirm('Apakah Anda yakin ingin menghapus kelas ini?')) {
             fetch(`/api/classes/delete/${classCode}`, {
@@ -312,7 +317,7 @@
             .then(data => {
                 if (data.success) {
                     alert('Kelas berhasil dihapus!');
-                    loadClasses();
+                    loadClasses(); // Refresh class list
                 } else {
                     alert('Gagal menghapus kelas!');
                 }
@@ -320,11 +325,11 @@
         }
     }
 
-    // Initial load
+    // Initial load of classes when the document is ready
     document.addEventListener('DOMContentLoaded', () => {
         loadClasses();
     });
-          </script>
+</script>
 
     </main>
 </body>
