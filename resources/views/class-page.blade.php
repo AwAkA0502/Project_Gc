@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="output.css">
@@ -17,8 +18,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
-<body class="bg-white flex flex-col">
-    <div id="navContainer"></div>
+<body class="bg-white h-screen overflow-y-hidden flex flex-col">
     <section id="Content" class="flex h-screen">
         <div id="Sidebar" class="flex flex-col py-2 border-r border-black px-2 gap-3" style="width: 400px;">
             <div id="Beranda" class="flex gap-4 justify-start items-center px-4 py-2 hover:bg-gray-200 rounded-xl" onclick="history.back()">
@@ -73,7 +73,7 @@
                 <p class="font-medium">Settings</p>
             </div>
         </div>
-        <div id="MainContent" class="w-full h-full flex flex-col gap-3 pb-5">
+        <div id="MainContent" class="w-full h-full flex flex-col gap-3 pb-5 overflow-y-auto">
             <div id="TabField" class="flex justify-between border-b border-black px-3">
                 <div class="flex gap-3 relative">
                     <div id="forumTab" class="p-3 font-bold border-b-2 border-blue-500 cursor-pointer"
@@ -91,20 +91,19 @@
                     </svg>
                 </button>
             </div>
-            <div id="ContentField" class="w-full h-full">
-                <div id="forumContent" class="tab-content gap-3 flex flex-col px-24">
+            <div id="ContentField" class="w-full h-full pb-10">
+                <div id="forumContent" class="tab-content gap-3 flex flex-col px-24 pb-10">
                     <div class="w-full bg-purple-600 rounded-xl flex justify-start items-end p-6"
                         style="height: 240px; background-image: url('assets/Bg_Tropical.jpg'); background-size: cover; background-position: center;">
                         <div class="flex flex-col">
-                            <h1 class="font-bold text-4xl text-white">Nama Kelas</h1>
-                            <p class="text-2xl text-white">Nama Mata Pelajaran</p>
+                            <h1 class="font-bold text-4xl text-white">{{ $kelas->nama_kelas }}</h1>                        </h1>
+                            <p class="text-2xl text-white">{{ $kelas->nama_pelajaran }}</p>
                         </div>
                     </div>
                     <div class="flex w-full gap-3">
                         <div id="Forum" class="flex flex-col gap-2 w-full">
                             <div class="w-full mx-auto border rounded-lg">
-                                <div
-                                    class="text-input-container flex justify-between items-center rounded-lg px-4 py-3 gap-3">
+                                <div class="text-input-container flex justify-between items-center rounded-lg px-4 py-3 gap-3">
                                     <div class="flex justify-start items-center gap-3 w-full">
                                         <img src="https://lh3.googleusercontent.com/a/ACg8ocLEisGP6WknDfqRaVv6yJDbwyNjwAk6UIoS6zPqctlJQ6EsyFsy=s40-c"
                                             alt="Profile" class="h-12 w-12 rounded-full">
@@ -339,41 +338,30 @@
                                         </svg>
                                     </button>
                                 </div>
-                                <h1 class="text-2xl font-medium">ibqhu5b</h1>
+                                <h1 class="text-2xl font-medium">{{ $kelas->kode_kelas }}</h1>
                             </div>
                             <div class="flex flex-col border rounded-lg max-h-fit p-2 gap-3">
                                 <p class="text-lg font-medium">Daftar Tugas</p>
                                 <div id="TaskList" class="flex flex-col gap-3">
-                                    <button id="Task" class="flex gap-2 justify-start items-center border p-2 rounded-lg hover:bg-gray-200">
-                                        <div class="p-2 bg-blue-500 max-w-fit max-h-fit rounded-lg">
-                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
-                                                <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
-                                        </div>
-                                        <div class="flex flex-col gap-1">
-                                            <p class="text-base font-medium">Nama Tugas</p>
-                                            <p class="text-sm">Deadline : <span>2 Mei</span></p>
-                                        </div>
-                                    </button>
-                                    <button id="Task" class="flex gap-2 justify-start items-center border p-2 rounded-lg hover:bg-gray-200">
-                                        <div class="p-2 bg-blue-500 max-w-fit max-h-fit rounded-lg">
-                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
-                                                <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
-                                        </div>
-                                        <div class="flex flex-col gap-1">
-                                            <p class="text-base font-medium">Nama Tugas</p>
-                                            <p class="text-sm">Deadline : <span>2 Mei</span></p>
-                                        </div>
-                                    </button>
-                                    <button id="Task" class="flex gap-2 justify-start items-center border p-2 rounded-lg hover:bg-gray-200">
-                                        <div class="p-2 bg-blue-500 max-w-fit max-h-fit rounded-lg">
-                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
-                                                <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
-                                        </div>
-                                        <div class="flex flex-col gap-1">
-                                            <p class="text-base font-medium">Nama Tugas</p>
-                                            <p class="text-sm">Deadline : <span>2 Mei</span></p>
-                                        </div>
-                                    </button>
+                                    @forelse ($kelas->tasks as $task)
+                                        <button id="Task" class="flex gap-2 justify-start items-center border p-2 rounded-lg hover:bg-gray-200">
+                                            <div class="p-2 bg-blue-500 max-w-fit max-h-fit rounded-lg">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                    stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                                                    <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                                                </svg>
+                                            </div>
+                                            <div class="flex flex-col gap-1">
+                                                <p class="text-base font-medium">{{ $task->judul }}</p>
+                                                <p class="text-sm">Deadline: <span>{{ \Carbon\Carbon::parse($task->deadline)->format('d M Y') }}</span></p>
+                                            </div>
+                                        </button>
+                                    @empty
+                                        <p class="text-gray-500 text-sm">Belum ada tugas untuk kelas ini.</p>
+                                    @endforelse
                                 </div>
                             </div>
                             <div id="People" class="flex flex-col gap-6 border rounded-xl p-3">
@@ -393,15 +381,14 @@
                                     </div>
                                     <div id="User" class="flex justify-start items-center gap-3">
                                         <div class="h-8 w-8 bg-gray-600 rounded-full"></div>
-                                        <p class="text-sm font-medium">Nama Pengajar</p>
+                                        <p class="text-sm font-medium">{{ $kelas->guru->name ?? 'Guru tidak ditemukan' }}</p>
                                     </div>
                                 </div>
                                 <div id="Teacher" class="flex flex-col gap-3">
                                     <div class="flex justify-between border-b pb-3">
                                         <h1 class="text-xl font-medium">Siswa</h1>
                                         <div class="flex gap-3">
-                                            <p class="text-md"><span>7</span> Siswa</p>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            <p class="text-md"><span>{{ $kelas->users->count() }}</span> Siswa</p>                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                                 stroke-linecap="round" stroke-linejoin="round"
                                                 class="icon icon-tabler icons-tabler-outline icon-tabler-user-plus">
@@ -412,55 +399,34 @@
                                                 <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />
                                             </svg>
                                         </div>
-
                                     </div>
-                                    <div id="User" class="flex justify-between items-center gap-3">
-                                        <div class="flex gap-2 justify-start items-center">
-                                            <div class="h-8 w-8 bg-gray-600 rounded-full"></div>
-                                            <p class="text-sm font-medium">Nama Siswa</p>
-                                        </div>
-                                        <button type="button"><svg xmlns="http://www.w3.org/2000/svg" width="20"
-                                                height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                                <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                                <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <div id="User" class="flex justify-between items-center gap-3">
-                                        <div class="flex gap-2 justify-start items-center">
-                                            <div class="h-8 w-8 bg-gray-600 rounded-full"></div>
-                                            <p class="text-sm font-medium">Nama Siswa</p>
-                                        </div>
-                                        <button type="button"><svg xmlns="http://www.w3.org/2000/svg" width="20"
-                                                height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                                <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                                <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <div id="User" class="flex justify-between items-center gap-3">
-                                        <div class="flex gap-2 justify-start items-center">
-                                            <div class="h-8 w-8 bg-gray-600 rounded-full"></div>
-                                            <p class="text-sm font-medium">Nama Siswa</p>
-                                        </div>
-                                        <button type="button"><svg xmlns="http://www.w3.org/2000/svg" width="20"
-                                                height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                                <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                                <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                            </svg>
-                                        </button>
+                                    <div class="flex flex-col gap-3">
+                                        @if ($kelas->users->isEmpty())
+                                            <p class="text-gray-500 text-sm">Belum ada siswa yang bergabung di kelas ini.</p>
+                                        @else
+                                            @foreach ($kelas->users as $user)
+                                                <div id="User" class="flex justify-between items-center gap-3">
+                                                    <div class="flex gap-2 justify-start items-center">
+                                                        <div class="h-8 w-8 bg-gray-600 rounded-full">
+                                                            @if ($user->avatar)
+                                                                <img src="{{ $user->avatar }}" alt="Avatar {{ $user->name }}" class="h-8 w-8 rounded-full">
+                                                            @endif
+                                                        </div>
+                                                        <p class="text-sm font-medium">{{ $user->name }}</p>
+                                                    </div>
+                                                    <button type="button">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                            class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                            <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                            <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                            <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            @endforeach
+                                        @endif
                                     </div>
                                 </div>
                             </div>

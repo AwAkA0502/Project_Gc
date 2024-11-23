@@ -2,8 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
-use App\Http\Controllers\ClassController; // Tambahkan controller untuk Class
+use App\Http\Controllers\ClassController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\TaskController;
+
 
 // Route untuk halaman welcome (default)
 Route::get('/', function () {
@@ -18,11 +20,12 @@ Route::post('/register', [UsersController::class, 'register'])->name('register')
 Route::get('/login', [UsersController::class, 'getLoginPage'])->name('login_page');
 Route::post('/login', [UsersController::class, 'login'])->name('login');
 
-// Route untuk halaman kelas (Class)
-Route::get('/class', [UsersController::class, 'welcome'])->middleware('auth')->name('class_page');
-
-// Route untuk menampilkan daftar kelas
-Route::get('/classes', [ClassController::class, 'getAllClasses'])->name('classes.index');
+Route::post('/join-class', [ClassController::class, 'join'])->name('join.class');
+Route::get('/get-classes', [ClassController::class, 'index'])->name('get.classes');
+Route::post('/create-class', [ClassController::class, 'create'])->name('create.class');
+Route::get('/my-classes', [ClassController::class, 'getMyClasses'])->name('my.classes');
+Route::get('/class-page/{id}', [ClassController::class, 'show'])->name('class.page');
+Route::get('/class-page/{id}', [TaskController::class, 'show'])->name('class.page');
 
 // Route untuk form pembuatan kelas
 Route::get('/class/create', function () {

@@ -5,64 +5,101 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ClassModel;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Kelas;
 
 class ClassController extends Controller
 {
-    public function createClass(Request $request)
+        public function index()
     {
-        // Validasi data input
-        $request->validate([
-            'class_name' => 'required|string|max:255',
-            'subject_name' => 'required|string|max:255',
+        // Ambil semua kelas yang dibuat oleh guru (atau pengguna yang login)
+        $kelas = Kelas::where('guru_id', auth()->id())->get();
+
+        return response()->json([
+            'kelas' => $kelas,
         ]);
-
-        // Generate class code secara acak
-        $classCode = $this->generateClassCode();
-
-        // Simpan data kelas ke database
-        $class = ClassModel::create([
-            'class_name' => $request->input('class_name'),
-            'subject_name' => $request->input('subject_name'),
-            'class_code' => $classCode,
-        ]);
-
-        return redirect()->route('class_page')->with('message', 'Class created successfully with code: ' . $classCode);
     }
 
-    public function joinClass(Request $request, $classCode)
-    {
-        // Mencari kelas berdasarkan kode
-        $class = ClassModel::where('class_code', $classCode)->first();
+    public function create(Request $request)
+{
+    $validated = $request->validate([
+        'nama_kelas' => 'required|string|max:255',
+        'nama_pelajaran' => 'required|string|max:255',
+    ]);
 
-        if ($class) {
-            // Bergabung dengan kelas
-            Auth::user()->classes()->attach($class->id);
-            return response()->json(['success' => true]);
-        }
+    $kelas = Kelas::create([
+        'nama_kelas' => $validated['nama_kelas'],
+        'nama_pelajaran' => $validated['nama_pelajaran'],
+        'kode_kelas' => strtoupper(substr(md5(uniqid()), 0, 6)), // Random kode kelas
+        'guru_id' => auth()->id(), // ID pengguna yang membuat kelas
+    ]);
 
-        return response()->json(['success' => false]);
+    return response()->json([
+        'message' => 'Kelas berhasil dibuat',
+        'kelas' => $kelas,
+    ]);
+}
+
+public function join(Request $request)
+{
+    $validated = $request->validate([
+        'kode_kelas' => 'required|string|exists:kelas,kode_kelas', // Validasi kode kelas
+    ]);
+
+    $kelas = Kelas::where('kode_kelas', $validated['kode_kelas'])->first();
+
+    if (!$kelas) {
+        return response()->json(['message' => 'Kode kelas tidak ditemukan.'], 404);
     }
 
-    public function deleteClass($classCode)
-    {
-        // Mencari kelas berdasarkan kode
-        $class = ClassModel::where('class_code', $classCode)->first();
+    $user = auth()->user();
 
-        if ($class) {
-            // Menghapus kelas
-            $class->delete();
-            return response()->json(['success' => true]);
-        }
-
-        return response()->json(['success' => false]);
+    // Cek apakah user sudah tergabung di kelas
+    if ($user->kelas()->where('kelas_id', $kelas->id)->exists()) {
+        return response()->json(['message' => 'Anda sudah tergabung di kelas ini.'], 400);
     }
 
-    // Fungsi untuk menghasilkan kode kelas acak
-    private function generateClassCode($length = 8)
+    // Tambahkan user ke kelas
+    $user->kelas()->attach($kelas->id);
+
+    return response()->json(['message' => 'Berhasil bergabung ke kelas']);
+}
+
+public function myClasses()
+{
+    $user = auth()->user();
+
+    // Ambil semua kelas yang diikuti user
+    $kelas = $user->kelas()->get();
+
+    return response()->json([
+        'kelas' => $kelas,
+    ]);
+}
+
+public function getMyClasses()
+{
+    $user = auth()->user();
+
+    // Kelas yang dibuat oleh user (sebagai guru)
+    $createdClasses = Kelas::where('guru_id', $user->id)->get();
+
+    // Kelas yang diikuti oleh user (melalui tabel pivot user_kelas)
+    $joinedClasses = $user->kelas()->get();
+
+    // Gabungkan hasil dari kedua query
+    $allClasses = $createdClasses->merge($joinedClasses)->unique('id');
+
+    return response()->json([
+        'kelas' => $allClasses,
+    ]);
+}
+
+public function show($id)
     {
-        $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        return substr(str_shuffle($chars), 0, $length);
+        // Cari data kelas berdasarkan ID
+        $kelas = Kelas::findOrFail($id);
+
+        // Kirim data kelas ke view
+        return view('class-page', compact('kelas'));
     }
 }

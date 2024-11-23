@@ -9,6 +9,11 @@ class User extends Authenticatable // Menggunakan Authenticatable sebagai kelas 
 {
     use Notifiable;
 
+    public function kelas()
+    {
+        return $this->belongsToMany(Kelas::class, 'user_kelas', 'user_id', 'kelas_id')->withTimestamps();
+    }
+
     protected $fillable = [
         'login', 'password', 'email',
     ];
