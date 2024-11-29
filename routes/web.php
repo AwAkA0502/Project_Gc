@@ -47,6 +47,7 @@ Route::delete('/class/delete/{classCode}', [ClassController::class, 'deleteClass
 
 // Route untuk halaman tugas (TaskPage)
 Route::get('/class-page/{kelas}/task-page/{task}', [TaskController::class, 'showTaskPage'])->name('task_page');
+Route::delete('/task/{task}/delete-file', [TaskController::class, 'deleteFile'])->name('task.deleteFile');
 
 // Route untuk halaman ganti password dan proses ganti password
 Route::get('/change-password', [UsersController::class, 'getChangePasswordPage'])->middleware('auth')->name('change_password_page');

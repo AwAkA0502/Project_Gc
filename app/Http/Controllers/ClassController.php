@@ -104,7 +104,9 @@ public function show($id)
 
     // Pastikan pengguna memiliki akses ke kelas ini
     $isTeacher = $kelas->guru_id === $user->id;
-    $isMember = $isTeacher || $kelas->users()->where('id', $user->id)->exists();
+
+    // Gunakan `users.id` untuk menghindari ambiguitas
+    $isMember = $isTeacher || $kelas->users()->where('users.id', $user->id)->exists();
 
     if (!$isMember) {
         abort(403, 'Anda tidak memiliki akses ke kelas ini.');

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth; // Tambahkan ini
 use App\Models\Kelas;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TaskController extends Controller
 {
@@ -17,10 +18,10 @@ class TaskController extends Controller
     // Ambil tugas berdasarkan taskId
     $task = Task::findOrFail($taskId);
 
-    // Tampilkan halaman tugas (task-page.blade.php)
+    // Kirim data tugas dan kelas ke view
     return view('task-page', [
         'kelas' => $kelas,
-        'task' => $task,
+        'task' => $task, // Pastikan data tugas dikirim ke view
     ]);
 }
 
@@ -94,6 +95,23 @@ public function destroy($id)
 
     return redirect()->back()->with('success', 'Tugas berhasil dihapus.');
 }
+
+public function deleteFile($taskId)
+    {
+        // Temukan tugas berdasarkan ID
+        $task = Task::findOrFail($taskId);
+
+        // Hapus file dari server jika file ada
+        if (Storage::disk('public')->exists($task->file_path)) {
+            Storage::disk('public')->delete($task->file_path);
+        }
+
+        // Update kolom file_path menjadi null setelah file dihapus (opsional)
+        $task->file_path = null;
+        $task->save();
+
+        return back()->with('success', 'File berhasil dihapus.');
+    }
 
 
 }
