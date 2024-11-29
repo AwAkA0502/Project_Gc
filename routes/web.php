@@ -25,7 +25,11 @@ Route::get('/get-classes', [ClassController::class, 'index'])->name('get.classes
 Route::post('/create-class', [ClassController::class, 'create'])->name('create.class');
 Route::get('/my-classes', [ClassController::class, 'getMyClasses'])->name('my.classes');
 Route::get('/class-page/{id}', [ClassController::class, 'show'])->name('class.page');
-Route::get('/class-page/{id}', [TaskController::class, 'show'])->name('class.page');
+Route::post('/kelas/{kelas}/tasks', [TaskController::class, 'store'])->middleware('auth')->name('task.store');
+Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->middleware('auth')->name('task.destroy');
+
+// Route::post('/add-task', [TaskController::class, 'store'])->middleware('auth')->name('task.store');
+
 
 // Route untuk form pembuatan kelas
 Route::get('/class/create', function () {
@@ -42,7 +46,7 @@ Route::post('/class/join/{classCode}', [ClassController::class, 'joinClass'])->n
 Route::delete('/class/delete/{classCode}', [ClassController::class, 'deleteClass'])->name('delete_class');
 
 // Route untuk halaman tugas (TaskPage)
-Route::get('/task-page', [UsersController::class, 'viewTaskPage'])->middleware('auth')->name('task_page');
+Route::get('/class-page/{kelas}/task-page/{task}', [TaskController::class, 'showTaskPage'])->name('task_page');
 
 // Route untuk halaman ganti password dan proses ganti password
 Route::get('/change-password', [UsersController::class, 'getChangePasswordPage'])->middleware('auth')->name('change_password_page');
@@ -54,7 +58,7 @@ Route::get('/error', function () {
 })->name('error_page');
 
 // Route untuk halaman personal
-Route::get('/personal', [UsersController::class, 'getPersonalPage'])->middleware('auth')->name('personal_page');
+Route::get('/home', [UsersController::class, 'getPersonalPage'])->middleware('auth')->name('personal_page');
 
 // Route untuk menampilkan video
 Route::get('/video', function () {

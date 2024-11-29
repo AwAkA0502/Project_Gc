@@ -123,7 +123,7 @@
 		<h3><a th:href="@{/Login}"></a></h3>
 	</div>
     <section id="Content" class="flex">
-        <div id="Sidebar" class="flex flex-col py-2 border-r h-screen border-black w-96 px-2 gap-3" style="width: 506px;">
+        <div id="Sidebar" class="flex flex-col py-2 border-r h-screen border-black w-96 px-2 gap-3" style="max-width: 256px;">
             <div id="Beranda" class="flex gap-4 justify-start items-center px-4 py-2 bg-gray-300 rounded-xl">
                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-home"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                     <path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
@@ -159,39 +159,23 @@
             </div>
         </div>
         <div id="MainContent" class="w-full flex flex-col gap-3 p-4">
-            <div id="Timeline" class="w-full flex flex-col gap-2">
+            <div id="Timeline" class="flex flex-col gap-2">
                 <p class="text-xl font-semibold">Timeline</p>
-                <div class="w-full gap-3 flex flex-wrap justify-start items-center">
-                    <div class="flex flex-col gap-2 p-3 bg-green-400 rounded-xl flex-grow">
-                        <p class="font-medium">Thursday, 2 Mei 2024</p>
-                        <div class="flex gap-2 w-full justify-start items-center">
-                            <img src="" class="w-10 h-10 bg-white rounded-full">
-                            <div class="flex flex-col gap-1">
-                                <p class="font-medium">Nama Kelas</p>
-                                <p class="font-medium">Nama Tugas</p>
+                <div class="w-fit gap-3 flex justify-start items-center overflow-x-auto" id="tasksContainer">
+                    @forelse ($tasks as $task)
+                        <div class="flex flex-col gap-2 p-3 bg-green-400 rounded-xl flex-grow w-fit">
+                            <p class="font-medium w-fit">{{ \Carbon\Carbon::parse($task->deadline)->format('l, d F Y') }}</p>
+                            <div class="flex gap-2 w-fit justify-start items-center">
+                                <img src="{{ asset('path-to-default-image.png') }}" class="w-10 h-10 bg-white rounded-full" alt="Class Icon">
+                                <div class="flex flex-col gap-1 w-fit">
+                                    <p class="font-medium">{{ $task->kelas->nama_kelas }}</p>
+                                    <p class="font-medium">{{ $task->judul }}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="flex flex-col gap-2 p-3 bg-green-400 rounded-xl flex-grow">
-                        <p class="font-medium">Thursday, 2 Mei 2024</p>
-                        <div class="flex gap-2 w-full justify-start items-center">
-                            <img src="" class="w-10 h-10 bg-white rounded-full">
-                            <div class="flex flex-col gap-1">
-                                <p class="font-medium">Nama Kelas</p>
-                                <p class="font-medium">Nama Tugas</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-2 p-3 bg-green-400 rounded-xl flex-grow">
-                        <p class="font-medium">Thursday, 2 Mei 2024</p>
-                        <div class="flex gap-2 w-full justify-start items-center">
-                            <img src="" class="w-10 h-10 bg-white rounded-full">
-                            <div class="flex flex-col gap-1">
-                                <p class="font-medium">Nama Kelas</p>
-                                <p class="font-medium">Nama Tugas</p>
-                            </div>
-                        </div>
-                    </div>
+                    @empty
+                        <p class="text-gray-500">Belum ada tugas untuk kelas yang Anda ikuti.</p>
+                    @endforelse
                 </div>
             </div>
             <div id="Timeline" class="w-full flex flex-col gap-2">
@@ -525,7 +509,56 @@ document.getElementById('joinClassBtn').addEventListener('click', function () {
     });
 }
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // URL API untuk mengambil data tugas
+        const tasksApiUrl = '/api/tasks';
 
+        // Kontainer tempat tugas akan ditampilkan
+        const tasksContainer = document.getElementById('tasksContainer');
+
+        // Fungsi untuk memuat tugas dari server
+        function loadTasks() {
+            fetch(tasksApiUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    tasksContainer.innerHTML = ''; // Kosongkan kontainer sebelum menambahkan tugas baru
+
+                    if (data.tasks.length > 0) {
+                        data.tasks.forEach(task => {
+                            const taskCard = `
+                                <div class="flex flex-col gap-2 p-3 bg-green-400 rounded-xl flex-grow w-fit">
+                                    <p class="font-medium w-fit">
+                                        ${new Date(task.deadline).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                                    </p>
+                                    <div class="flex gap-2 w-fit justify-start items-center">
+                                        <img src="/path-to-default-image.png" class="w-10 h-10 bg-white rounded-full" alt="Class Icon">
+                                        <div class="flex flex-col gap-1 w-fit">
+                                            <p class="font-medium">${task.kelas.nama_kelas}</p>
+                                            <p class="font-medium">${task.judul}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            tasksContainer.innerHTML += taskCard;
+                        });
+                    } else {
+                        tasksContainer.innerHTML = `<p class="text-gray-500">Belum ada tugas untuk kelas yang Anda ikuti.</p>`;
+                    }
+                })
+                .catch(error => console.error('Error fetching tasks:', error));
+        }
+
+        // Panggil fungsi untuk memuat tugas
+        loadTasks();
+    });
+</script>
 
 
 </html>

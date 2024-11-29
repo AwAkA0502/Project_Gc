@@ -35,6 +35,22 @@ class TaskSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'judul' => 'Tugas apalah',
+                'deskripsi' => 'Analisis senyawa hidrokarbon.',
+                'deadline' => Carbon::now()->addDays(7), // Deadline 7 hari ke depan
+                'kelas_id' => 8, // Pastikan ID kelas sesuai
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'judul' => 'Tugas itulah',
+                'deskripsi' => 'Analisis senyawa hidrokarbon.',
+                'deadline' => Carbon::now()->addDays(7), // Deadline 7 hari ke depan
+                'kelas_id' => 8, // Pastikan ID kelas sesuai
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

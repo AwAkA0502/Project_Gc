@@ -78,8 +78,12 @@
                 <div class="flex gap-3 relative">
                     <div id="forumTab" class="p-3 font-bold border-b-2 border-blue-500 cursor-pointer"
                         onclick="switchTab('forum')">Forum</div>
-                    <div id="nilaiTab" class="p-3 font-medium cursor-pointer" onclick="switchTab('nilai')">Nilai</div>
-                </div>
+                    @if ($isTeacher)
+                        <div id="nilaiTab" class="p-3 font-medium cursor-pointer" onclick="switchTab('nilai')">Nilai</div>
+                    @endif        
+                    {{-- <div id="nilaiTab" class="p-3 font-medium cursor-pointer" onclick="switchTab('nilai')">Nilai</div> --}}
+   
+             </div>
                 <button type="button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -344,7 +348,8 @@
                                 <p class="text-lg font-medium">Daftar Tugas</p>
                                 <div id="TaskList" class="flex flex-col gap-3">
                                     @forelse ($kelas->tasks as $task)
-                                        <button id="Task" class="flex gap-2 justify-start items-center border p-2 rounded-lg hover:bg-gray-200">
+                                        <!-- Link yang mengarah ke halaman task-page -->
+                                        <a href="{{ route('task_page', ['kelas' => $kelas->id, 'task' => $task->id]) }}" class="flex gap-2 justify-start items-center border p-2 rounded-lg hover:bg-gray-200">
                                             <div class="p-2 bg-blue-500 max-w-fit max-h-fit rounded-lg">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                                     stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -354,11 +359,11 @@
                                                     <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
                                                 </svg>
                                             </div>
-                                            <div class="flex flex-col gap-1">
+                                            <div class="flex flex-col justify-start items-start gap-1">
                                                 <p class="text-base font-medium">{{ $task->judul }}</p>
                                                 <p class="text-sm">Deadline: <span>{{ \Carbon\Carbon::parse($task->deadline)->format('d M Y') }}</span></p>
                                             </div>
-                                        </button>
+                                        </a>
                                     @empty
                                         <p class="text-gray-500 text-sm">Belum ada tugas untuk kelas ini.</p>
                                     @endforelse
@@ -435,81 +440,127 @@
                 </div>
                 <div id="nilaiContent" class="tab-content flex flex-col gap-1 hidden px-4">
                     <div id="Chip_Field" class="flex p-3 gap-3">
-                        <button id="Chip-1" class="chip flex gap-2 justify-center items-center px-3 py-2 bg-green-400 rounded-xl active">
-                            <p class="text-white font-medium">Tugas 1</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" />
-                            </svg>
+                        @foreach ($tasks as $task)
+                        <button id="Chip-{{ $task->id }}" class="chip flex gap-2 justify-center items-center px-3 py-2 bg-green-400 rounded-xl">
+                            <p class="text-white font-medium">{{ $task->judul }}</p>
+                            <!-- Form untuk menghapus tugas -->
+                            <form method="POST" action="{{ route('task.destroy', ['task' => $task->id]) }}" onsubmit="return confirm('Hapus tugas ini?')" class="ml-2">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-transparent border-none p-0">
+                                    <!-- Tombol X -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M18 6l-12 12" />
+                                        <path d="M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </form>
                         </button>
-                        <button id="Chip-2" class="chip flex gap-2 justify-center items-center px-3 py-2 border-black border rounded-xl">
-                            <p class="text-black font-medium">Tugas 2</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M18 6l-12 12" />
-                                <path d="M6 6l12 12" />
-                            </svg>
-                        </button>      
-                        <button id="Chip-3" class="chip flex gap-2 justify-center items-center px-3 py-2 border-black border rounded-xl">
-                            <p class="text-black font-medium">Tugas 3</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" />
-                            </svg>
-                        </button>  
-                        <button id="Chip-4" class="chip flex gap-2 justify-center items-center px-3 py-2 border-black border rounded-xl">
-                            <p class="text-black font-medium">Tugas 4</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" />
-                            </svg>
-                        </button>    
-                        <button id="NewTask" class="flex justify-center items-center px-3 py-2 border rounded-xl gap-2 bg-blue-500 text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M12 5l0 14" />
-                                <path d="M5 12l14 0" />
-                            </svg>
-                            <p class="font-medium">Buat Tugas</p>
-                        </button>
-                        <div id="modalNewTask" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-                            <div class="bg-white p-5 rounded-lg shadow-lg w-1/3 flex flex-col gap-3">
-                                <div id="Input_Field" class="flex flex-col gap-2">
-                                    <p class="text-xl">Judul</p>
-                                    <input id="TitleInput" type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
-                                </div>
-                                <div id="Input_Field" class="flex flex-col gap-2">
-                                    <p class="text-xl">Desc</p>
-                                    <input id="DescInput" type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
-                                </div>
-                                <div class="flex gap-3 justify-center items-center w-full">
-                                    <div id="Input_Field" class="flex flex-col gap-2 w-full">
-                                        <p class="text-xl">DeadLine</p>
-                                        <input id="DeadLineInput" type="date" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
-                                    </div>
-                                    <div id="Input_Field" class="flex flex-col gap-2 w-full">
-                                        <p class="text-xl">Waktu</p>
-                                        <input id="TimeInput" type="time" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
-                                    </div>
-                                    <div id="Input_Field" class="flex flex-col gap-2 w-full">
-                                        <p class="text-xl">Nilai</p>
-                                        <input id="ValueInput" type="number" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" min="0" max="100">
-                                    </div>
-                                </div>
-                                <div class="w-full">
-                                    <button id="uploadButton" class="w-full border-2 border-gray-300 rounded-lg max-h-fit flex flex-col justify-center items-center p-12 bg-gray-100">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-upload">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
-                                            <path d="M7 9l5 -5l5 5" />
-                                            <path d="M12 4v12" />
-                                        </svg>
-                                        <p>Klik atau seret file disini</p>
-                                    </button>
-                                    <input id="fileInput" type="file" class="hidden">
-                                    <div id="UploadedFile" class="flex gap-3 overflow-y-hidden overflow-x-auto mt-4"></div>
-                                </div>
-                                <button class="bg-blue-500 text-white font-medium py-4 rounded-lg">Upload Tugas</button>
-                            </div>
-                        </div>
+                        @endforeach
                     
+                        @if ($isTeacher)
+                            <button id="NewTask" class="flex justify-center items-center px-3 py-2 border rounded-xl gap-2 bg-blue-500 text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M12 5l0 14" />
+                                    <path d="M5 12l14 0" />
+                                </svg>
+                                <p class="font-medium">Buat Tugas</p>
+                            </button>
+                        @endif
+                    </div>
+                    
+                    <!-- Modal untuk membuat tugas -->
+                    <div id="modalNewTask" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+                        <div class="bg-white rounded-lg p-6 w-96 relative">
+                            <button id="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 6L6 18"></path>
+                                    <path d="M6 6L18 18"></path>
+                                </svg>
+                            </button>
+                    
+                            <form method="POST" action="{{ route('task.store', ['kelas' => $kelas->id]) }}" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
+                                
+                                <!-- Form fields -->
+                                <div class="flex flex-col gap-2">
+                                    <label for="judul">Judul</label>
+                                    <input name="judul" id="judul" type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" required>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label for="deskripsi">Deskripsi</label>
+                                    <input name="deskripsi" id="deskripsi" type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
+                                </div>
+                                <div class="flex flex-row gap-3">
+                                    <div class="flex flex-col gap-2">
+                                        <label for="deadline">Deadline</label>
+                                        <input name="deadline" id="deadline" type="date" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" required>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <label for="waktu">Waktu</label>
+                                        <input name="waktu" id="waktu" type="time" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label for="nilai">Nilai</label>
+                                    <input name="nilai" id="nilai" type="number" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" min="0" max="100">
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label for="file">File</label>
+                                    <input name="file" id="file" type="file" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
+                                </div>
+                                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4">Simpan Tugas</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Modal untuk membuat tugas -->
+                    <div id="modalNewTask" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+                        <div class="bg-white rounded-lg p-6 w-96 relative">
+                            <button id="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 6L6 18"></path>
+                                    <path d="M6 6L18 18"></path>
+                                </svg>
+                            </button>
+                    
+                            <form method="POST" action="{{ route('task.store', ['kelas' => $kelas->id]) }}" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
+                                
+                                <!-- Form fields -->
+                                <div class="flex flex-col gap-2">
+                                    <label for="judul">Judul</label>
+                                    <input name="judul" id="judul" type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" required>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label for="deskripsi">Deskripsi</label>
+                                    <input name="deskripsi" id="deskripsi" type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
+                                </div>
+                                <div class="flex flex-row gap-3">
+                                    <div class="flex flex-col gap-2">
+                                        <label for="deadline">Deadline</label>
+                                        <input name="deadline" id="deadline" type="date" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" required>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <label for="waktu">Waktu</label>
+                                        <input name="waktu" id="waktu" type="time" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label for="nilai">Nilai</label>
+                                    <input name="nilai" id="nilai" type="number" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" min="0" max="100">
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label for="file">File</label>
+                                    <input name="file" id="file" type="file" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
+                                </div>
+                                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4">Simpan Tugas</button>
+                            </form>
+                        </div>
                     </div>
                     <div id="Content_Field" class="p-3 w-full gap-3 flex flex-col">
                         <div class="flex w-full justify-between items-end">
@@ -973,6 +1024,115 @@ function switchTab(tab) {
         forumContent.classList.add("hidden");
     }
 }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const modalNewTask = document.getElementById('modalNewTask');
+        const newTaskButton = document.getElementById('NewTask');
+        const uploadButton = modalNewTask.querySelector('.bg-blue-500.text-white.font-medium.py-4');
+
+        // Fungsi untuk membuka modal
+        const openModal = () => {
+            modalNewTask.classList.remove('hidden');
+        };
+
+        // Fungsi untuk menutup modal
+        const closeModal = () => {
+            modalNewTask.classList.add('hidden');
+        };
+
+        // Fungsi untuk menambahkan chip baru ke UI
+        const addTaskToUI = (task) => {
+            const chipField = document.getElementById('Chip_Field');
+            
+            // Buat elemen chip baru
+            const newChip = document.createElement('button');
+            newChip.id = `Chip-${task.id}`;
+            newChip.className = 'chip flex gap-2 justify-center items-center px-3 py-2 bg-green-400 rounded-xl';
+            
+            // Tambahkan konten ke chip
+            newChip.innerHTML = `
+                <p class="text-white font-medium">${task.judul}</p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M18 6l-12 12" />
+                    <path d="M6 6l12 12" />
+                </svg>
+            `;
+
+            // Tambahkan chip baru ke chip field
+            chipField.appendChild(newChip);
+
+            // Tambahkan event listener untuk close button di chip
+            newChip.querySelector('svg').addEventListener('click', () => {
+                newChip.remove(); // Hapus chip dari UI
+            });
+        };
+
+        // Event listener untuk membuka modal
+        newTaskButton.addEventListener('click', openModal);
+
+        // Event listener untuk menutup modal jika klik di luar modal
+        modalNewTask.addEventListener('click', (e) => {
+            if (e.target === modalNewTask) {
+                closeModal();
+            }
+        });
+
+        // Event listener untuk tombol upload tugas
+        uploadButton.addEventListener('click', () => {
+            const title = document.getElementById('TitleInput').value;
+            const description = document.getElementById('DescInput').value;
+            const deadline = document.getElementById('DeadLineInput').value;
+            const time = document.getElementById('TimeInput').value;
+            const value = document.getElementById('ValueInput').value;
+            const kelasId = 7; // Ganti dengan ID kelas yang dinamis
+
+            // Validasi input
+            if (!title || !description || !deadline || !time || !value) {
+                alert('Semua field wajib diisi!');
+                return;
+            }
+
+            // Kirim data ke backend
+            fetch('/add-task', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                },
+                body: JSON.stringify({
+                    judul: title,
+                    deskripsi: description,
+                    deadline: deadline,
+                    time: time,
+                    nilai: value,
+                    kelas_id: kelasId,
+                }),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        return response.json().then((err) => {
+                            throw new Error(err.message || 'Terjadi kesalahan.');
+                        });
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    if (data.message === 'Task successfully created') {
+                        alert('Tugas berhasil dibuat!');
+                        closeModal(); // Tutup modal
+                        addTaskToUI(data.task); // Tambahkan tugas ke UI
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan. Silakan coba lagi.');
+                });
+        });
+    });
 </script>
 <script src="/Js/Nav.js"></script>
     

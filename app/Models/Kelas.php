@@ -17,6 +17,7 @@ class Kelas extends Model
     {
         return $this->hasMany(Task::class, 'kelas_id');
     }
+    
 
     protected $fillable = [
         'nama_kelas',
@@ -38,4 +39,6 @@ class Kelas extends Model
 
     return view('class-page', compact('kelas'));
 }
+
+
 }

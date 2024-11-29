@@ -104,14 +104,29 @@ class UsersController extends Controller
     // Menampilkan halaman tugas
     public function viewTaskPage()
     {
-        return view('task_page');
+        return view('task-page');
     }
 
     // Menampilkan halaman personal setelah login
     public function getPersonalPage()
     {
-        // Mengirimkan data pengguna yang sedang login ke halaman personal
-        $userLogin = Auth::user() ? Auth::user()->login : 'Pengguna Tidak Terdaftar';
-        return view('personal_page', ['userLogin' => $userLogin]); // Menyediakan variabel userLogin
+        // Ambil pengguna yang sedang login
+        $user = Auth::user();
+        
+    
+        if (!$user) {
+            return redirect()->route('login_page')->withErrors('Silakan login terlebih dahulu.');
+        }
+    
+        // Ambil semua tugas dari kelas yang diikuti pengguna
+        $tasks = $user->kelas()->with('tasks')->get()->pluck('tasks')->flatten()->filter(function ($task) {
+            return $task !== null;
+        });    
+        
+        // Kirim data pengguna dan tugas ke view
+        return view('personal_page', [
+            'userLogin' => $user->login, // Nama pengguna
+            'tasks' => $tasks, // Semua tugas yang diikuti pengguna
+        ]);
     }
 }

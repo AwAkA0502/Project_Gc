@@ -4,6 +4,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth; // Tambahkan namespace ini
 use Illuminate\Http\Request;
 use App\Models\Kelas;
 
@@ -95,11 +96,27 @@ public function getMyClasses()
 }
 
 public function show($id)
-    {
-        // Cari data kelas berdasarkan ID
-        $kelas = Kelas::findOrFail($id);
+{
+    $user = Auth::user();
 
-        // Kirim data kelas ke view
-        return view('class-page', compact('kelas'));
+    // Muat kelas beserta tugas-tugasnya
+    $kelas = Kelas::with('tasks')->findOrFail($id);
+
+    // Pastikan pengguna memiliki akses ke kelas ini
+    $isTeacher = $kelas->guru_id === $user->id;
+    $isMember = $isTeacher || $kelas->users()->where('id', $user->id)->exists();
+
+    if (!$isMember) {
+        abort(403, 'Anda tidak memiliki akses ke kelas ini.');
     }
+
+    // Kirim data ke view
+    return view('class-page', [
+        'kelas' => $kelas,
+        'isTeacher' => $isTeacher,
+        'tasks' => $kelas->tasks, // Tugas dikirim sebagai variabel tasks
+    ]);
+}
+
+    
 }
