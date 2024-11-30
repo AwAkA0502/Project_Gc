@@ -128,6 +128,7 @@
                     @endforelse
                 </div>
             </div>
+            
             <div id="Course" class="w-full flex flex-col gap-3 px-5 pt-3 pb-5 rounded-2xl"style="background-color : #89B88D;">
                 <p class="text-xl font-semibold text-white">Course Overview</p>
                 <div id="cardsContainer" class="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -150,8 +151,11 @@
         <div id="SubContent" class="w-54 flex flex-col gap-5 p-5">
             <div class="w-full flex flex-col gap-5 rounded-xl p-3" style="background-color: #89B88D;">
                 <p class="text-xl font-semibold text-white">Buat Kelas</p>
-                <button id="buatKelasBtn" class="p-3 rounded-lg font-semibold" style="background-color: #B0D9B1; color: #506C50;">Buat</button>
+                <button id="buatKelasBtn" class="p-3 rounded-lg font-semibold" style="background-color: #B0D9B1; color: #506C50;">
+                    Buat
+                </button>
             </div>
+            
             <div id="modalMakeClass" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
                 <div class="bg-white p-5 rounded-lg shadow-lg w-1/3 flex flex-col gap-2">
                     <div class="flex justify-between items-start mb-4 flex-col gap-2 max-h-fit">
@@ -162,7 +166,14 @@
                         <h2 class="text-xl font-semibold">Nama Pelajaran</h2>
                         <input id="subjectInput" type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
                     </div>
-                    <button id="buatKelasModalBtn" class="p-2 bg-blue-500 text-white rounded-lg font-medium">Buat</button>
+                    <div class="flex justify-between items-center gap-2">
+                        <button id="closeModalBtn" class="p-2 bg-red-500 text-white rounded-lg font-medium">
+                            Tutup
+                        </button>
+                        <button id="buatKelasModalBtn" class="p-2 bg-blue-500 text-white rounded-lg font-medium">
+                            Buat
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="w-full flex flex-col gap-5 rounded-xl p-3" style="background-color: #89B88D;">
@@ -252,227 +263,147 @@
     
 </body>
 <script>
-    document.getElementById('accountImage').addEventListener('click', function() {
-    const dropdown = document.getElementById('dropdownMenu');
-    dropdown.classList.toggle('hidden');
-});
+    document.addEventListener("DOMContentLoaded", () => {
+    const buatKelasBtn = document.getElementById("buatKelasBtn");
+    const modalMakeClass = document.getElementById("modalMakeClass");
+    const buatKelasModalBtn = document.getElementById("buatKelasModalBtn");
+    const cardsContainer = document.getElementById("cardsContainer");
 
-     document.addEventListener('DOMContentLoaded', function() {
-            const buatKelasBtn = document.getElementById('buatKelasBtn');
-            const modalMakeClass = document.getElementById('modalMakeClass');
-            const modalContent = document.querySelector('#modalMakeClass > .bg-white');
-            const closeModalBtn = document.getElementById('buatKelasModalBtn');
-            const nameInput = document.getElementById('nameInput');
-            const subjectInput = document.getElementById('subjectInput');
-            const submitBtn = document.getElementById('buatKelasModalBtn');
+    // Tombol untuk menutup modal
+    const closeModalBtn = document.createElement("button");
+    closeModalBtn.id = "closeModalBtn";
+    closeModalBtn.className = "p-2 bg-red-500 text-white rounded-lg font-medium mt-4";
+    closeModalBtn.innerText = "Tutup";
 
-            // Fungsi untuk menutup modal dan mereset input
-            function closeModal() {
-                modalMakeClass.classList.add('hidden');
-                nameInput.value = '';
-                subjectInput.value = '';
-            }
+    if (!document.getElementById("closeModalBtn")) {
+        modalMakeClass.querySelector(".bg-white").appendChild(closeModalBtn);
+    }
 
-            // Menambahkan event listener untuk membuka modal
-            buatKelasBtn.addEventListener('click', function() {
-                modalMakeClass.classList.remove('hidden');
-            });
+    // Tampilkan modal
+    buatKelasBtn.addEventListener("click", () => {
+        modalMakeClass.classList.remove("hidden");
+    });
 
-            // Menambahkan event listener untuk menutup modal (tombol Buat)
-            submitBtn.addEventListener('click', closeModal);
+    // Sembunyikan modal
+    closeModalBtn.addEventListener("click", () => {
+        modalMakeClass.classList.add("hidden");
+    });
 
-            // Menambahkan event listener untuk menutup modal ketika area luar modal diklik
-            modalMakeClass.addEventListener('click', function(event) {
-                if (event.target === modalMakeClass) {
-                    closeModal();
-                }
-            });
-
-            // Mencegah penutupan modal ketika mengklik konten modal
-            modalContent.addEventListener('click', function(event) {
-                event.stopPropagation();
-            });
-        });
-</script>
-<script>
-    // Fungsi untuk mengambil data kelas dari server dan menampilkan card
-function loadClasses() {
-    fetch('/my-classes', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        const cardsContainer = document.getElementById('cardsContainer');
-        cardsContainer.innerHTML = ''; // Kosongkan container sebelum menambahkan card
-
-        // Render setiap kelas ke dalam container
-        data.kelas.forEach(kelas => {
-            const newCard = document.createElement('a');
-            newCard.href = `/class-page/${kelas.id}`;
-            newCard.className = 'rounded-xl border border-black flex-grow';
-            newCard.innerHTML = `
-                <div class="max-h-fit w-full">
-                    <img src="Assets/Background_Class.png" class="rounded-t-xl w-full h-24">
-                </div>
-                <div class="flex justify-between w-full px-4 py-2">
-                    <div class="flex flex-col">
-                        <p>${kelas.nama_kelas}</p>
-                        <p>${kelas.nama_pelajaran}</p>
-                    </div>
-                    <button type="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
-                            <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
-                            <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
-                        </svg>
-                    </button>
-                </div>
-            `;
-            cardsContainer.appendChild(newCard);
-        });
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-// Fungsi untuk membuat kelas baru dan menampilkan card
-document.getElementById('buatKelasModalBtn').addEventListener('click', function () {
-    const nameInput = document.getElementById('nameInput').value;
-    const subjectInput = document.getElementById('subjectInput').value;
-
-    fetch('/create-class', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({
-            nama_kelas: nameInput,
-            nama_pelajaran: subjectInput
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.message === 'Kelas berhasil dibuat') {
-            const cardsContainer = document.getElementById('cardsContainer');
-            const newCard = document.createElement('a');
-            newCard.href = `/class-page/${data.kelas.id}`;
-            newCard.className = 'rounded-xl border border-black flex-grow';
-            newCard.innerHTML = `
-                <div class="max-h-fit w-full">
-                    <img src="Assets/Background_Class.png" class="rounded-t-xl w-full h-24">
-                </div>
-                <div class="flex justify-between w-full px-4 py-2">
-                    <div class="flex flex-col">
-                        <p>${data.kelas.nama_kelas}</p>
-                        <p>${data.kelas.nama_pelajaran}</p>
-                    </div>
-                    <button type="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
-                            <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
-                            <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
-                        </svg>
-                    </button>
-                </div>
-            `;
-            cardsContainer.appendChild(newCard);
-
-            // Tutup modal
-            document.getElementById('modalMakeClass').classList.add('hidden');
-        } else {
-            alert('Terjadi kesalahan: ' + data.message);
+    // Tutup modal jika klik di luar area modal
+    window.addEventListener("click", (event) => {
+        if (event.target === modalMakeClass) {
+            modalMakeClass.classList.add("hidden");
         }
-    })
-    .catch(error => console.error('Error:', error));
-});
+    });
 
-// Panggil loadClasses saat halaman dimuat
-document.addEventListener('DOMContentLoaded', loadClasses);
+    // Fungsi untuk memuat daftar kelas
+    function loadClasses() {
+        fetch("/my-classes", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                cardsContainer.innerHTML = ""; // Bersihkan card container
 
-document.getElementById('joinClassBtn').addEventListener('click', function () {
-        const kodeKelas = document.getElementById('classCodeInput').value;
+                data.kelas.forEach((kelas) => {
+                    const newCard = document.createElement("a");
+                    newCard.href = `/class-page/${kelas.id}`; // Mengarahkan ke halaman kelas berdasarkan ID
+                    newCard.className = "flex flex-col gap-3 pl-3 pr-2 pt-2 pb-3 rounded-xl";
+                    newCard.style.backgroundColor = "#D0E7D2";
+                    newCard.innerHTML = `
+                        <div class="flex px-1 py-2 justify-between border-b" style="border-color: #618264;">
+                            <div class="flex gap-3">
+                                <div class="rounded-full" style="background-color: #618264; width: 35px; height: 35px;"></div>
+                                <p class="font-semibold" style="font-size: 14px; color: #064420;">
+                                    ${kelas.guru?.name || "Dosen Tidak Diketahui"}
+                                </p>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#618264" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                            </svg>
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            <p class="font-medium" style="color: #064420; font-size: 12px;">${kelas.nama_kelas}</p>
+                            <p class="font-regular" style="color: #064420; font-size: 12px;">${kelas.nama_pelajaran}</p>
+                        </div>
+                    `;
+                    cardsContainer.appendChild(newCard);
+                });
+            })
+            .catch((error) => console.error("Error fetching classes:", error));
+    }
 
-        if (!kodeKelas.trim()) {
-            alert('Kode kelas tidak boleh kosong.');
+    // Fungsi untuk membuat kelas baru
+    buatKelasModalBtn.addEventListener("click", function () {
+        const nameInput = document.getElementById("nameInput").value;
+        const subjectInput = document.getElementById("subjectInput").value;
+
+        if (!nameInput.trim() || !subjectInput.trim()) {
+            alert("Nama kelas dan pelajaran tidak boleh kosong!");
             return;
         }
 
-        // Kirim kode kelas ke server menggunakan Fetch API
-        fetch('/join-class', {
-            method: 'POST',
+        fetch("/create-class", {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
             },
-            body: JSON.stringify({ kode_kelas: kodeKelas })
+            body: JSON.stringify({
+                nama_kelas: nameInput,
+                nama_pelajaran: subjectInput,
+            }),
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message === 'Berhasil bergabung ke kelas') {
-                alert('Anda berhasil bergabung ke kelas!');
-                loadClasses(); // Refresh daftar kelas setelah berhasil bergabung
-            } else {
-                alert(data.message); // Tampilkan pesan error dari server
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Terjadi kesalahan saat mencoba bergabung ke kelas.');
-        });
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.message === "Kelas berhasil dibuat") {
+                    const newCard = document.createElement("a");
+                    newCard.href = `/class-page/${data.kelas.id}`;
+                    newCard.className = "flex flex-col gap-3 pl-3 pr-2 pt-2 pb-3 rounded-xl";
+                    newCard.style.backgroundColor = "#D0E7D2";
+                    newCard.innerHTML = `
+                        <div class="flex px-1 py-2 justify-between border-b" style="border-color: #618264;">
+                            <div class="flex gap-3">
+                                <div class="rounded-full" style="background-color: #618264; width: 35px; height: 35px;"></div>
+                                <p class="font-semibold" style="font-size: 14px; color: #064420;">
+                                    ${data.kelas.guru?.name || "Dosen Tidak Diketahui"}
+                                </p>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#618264" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                            </svg>
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            <p class="font-medium" style="color: #064420; font-size: 12px;">${data.kelas.nama_kelas}</p>
+                            <p class="font-regular" style="color: #064420; font-size: 12px;">${data.kelas.nama_pelajaran}</p>
+                        </div>
+                    `;
+                    cardsContainer.appendChild(newCard);
+
+                    modalMakeClass.classList.add("hidden");
+                    document.getElementById("nameInput").value = "";
+                    document.getElementById("subjectInput").value = "";
+                } else {
+                    alert("Terjadi kesalahan: " + data.message);
+                }
+            })
+            .catch((error) => console.error("Error:", error));
     });
 
-    // Fungsi untuk memuat ulang daftar kelas
-    function loadClasses() {
-    fetch('/my-classes', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        const cardsContainer = document.getElementById('cardsContainer');
-        cardsContainer.innerHTML = ''; // Kosongkan container sebelum menambahkan card
-
-        // Render setiap kelas ke dalam container
-        data.kelas.forEach(kelas => {
-            const newCard = document.createElement('a');
-            newCard.href = `/class-page/${kelas.id}`;
-            newCard.className = 'rounded-xl border border-black flex-grow';
-            newCard.innerHTML = `
-                <div class="max-h-fit w-full">
-                    <img src="Assets/Background_Class.png" class="rounded-t-xl w-full h-24">
-                </div>
-                <div class="flex justify-between w-full px-4 py-2">
-                    <div class="flex flex-col">
-                        <p>${kelas.nama_kelas}</p>
-                        <p>${kelas.nama_pelajaran}</p>
-                    </div>
-                    <button type="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
-                            <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
-                            <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
-                        </svg>
-                    </button>
-                </div>
-            `;
-            cardsContainer.appendChild(newCard);
-        });
-    })
-    .catch(error => {
-        console.error('Error fetching classes:', error);
-    });
-}
+    loadClasses(); // Memuat kelas saat halaman dimuat
+});
 </script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // URL API untuk mengambil data tugas
