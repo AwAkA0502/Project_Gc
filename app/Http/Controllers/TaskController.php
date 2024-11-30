@@ -79,9 +79,11 @@ class TaskController extends Controller
     }
 
     // Simpan file jika ada
-    $filePath = null;
+    $fileName = null;
     if ($request->hasFile('file')) {
-        $filePath = $request->file('file')->store('uploads/tugas', 'public');
+        $file = $request->file('file');
+        $fileName = $file->getClientOriginalName(); // Ambil nama file asli
+        $file->storeAs('uploads/tugas', $fileName, 'public'); // Simpan file dengan nama asli
     }
 
     // Simpan data ke tabel tugas
@@ -92,12 +94,11 @@ class TaskController extends Controller
         'deadline' => $validatedData['deadline'],
         'waktu' => $validatedData['waktu'],
         'nilai' => $validatedData['nilai'],
-        'file_path' => $filePath,
+        'file_path' => $fileName, // Simpan nama file saja
     ]);
 
     // Berikan respons JSON atau redirect sesuai kebutuhan
     return redirect()->route('class.page', ['id' => $kelas])->with('success', 'Tugas berhasil ditambahkan.');
-
 }
 
 public function destroy($id)
