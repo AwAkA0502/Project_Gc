@@ -54,40 +54,51 @@
                 </div>
             </div>
             
-            <div class="flex flex-col gap-5 p-5 bg-white rounded-lg shadow-md">
+            <div class="flex flex-col gap-4">
                 <!-- Header -->
-                <h2 class="text-3xl font-bold text-gray-800">Tugas: {{ $task->judul }}</h2>
-                <p class="text-gray-500 text-lg">{{ $task->deskripsi }}</p>
-            
-                @if ($submission)
-                <!-- Jika sudah mengirimkan -->
-                <div class="flex flex-col gap-3">
-                    <p class="text-green-600 font-semibold">Status: Sudah Diserahkan</p>
-                    <div class="flex items-center gap-3">
-                        <a href="{{ asset('storage/' . $submission->file_url) }}" target="_blank" class="text-blue-500 underline hover:text-blue-700 truncate max-w-xs" title="{{ basename($submission->file_url) }}">
-                            {{ basename($submission->file_url) }}
-                        </a>
+                 <div class="flex gap-5">
+                    <div class="flex flex-col gap-3 p-2 justify-center items-center rounded-lg  w-full" style="background-color: #89B88D;">
+                        <p class="text-xl font-semibold text-white">Nilai</p>
+                        <p class="text-base font-medium text-[#064420]">/100</p>
                     </div>
-                    <form action="{{ route('submission.destroy', ['id' => $submission->id]) }}" method="POST" class="mt-2">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="w-full bg-red-500 text-white font-semibold py-2 rounded-lg hover:bg-red-700 transition">
-                            Batalkan Pengiriman
-                        </button>
-                    </form>
+                    <div class="flex flex-col gap-3 p-2 justify-center items-center rounded-lg bg-green-400 w-full" style="background-color: #89B88D;">
+                        <p class="text-xl font-semibold text-white">Status</p>
+                        <p class="text-base font-medium text-[#4EFF98]">Diserahkan</p>
+                    </div>
+                 </div>
+                <div class="flex flex-col gap-6 px-3 py-5 justify-center items-center rounded-xl bg-green-400">
+                    <h2 class="text-xl font-semibold text-white">Tugas : {{ $task->judul }}</h2>
+                    <p class="text-gray-500 text-lg">{{ $task->deskripsi }}</p>
+                
+                    @if ($submission)
+                    <!-- Jika sudah mengirimkan -->
+                    <div class="flex flex-col gap-3">
+                        <div class="flex items-center gap-3">
+                            <a href="{{ asset('storage/' . $submission->file_url) }}" target="_blank" class="text-blue-500 underline hover:text-blue-700 truncate max-w-xs" title="{{ basename($submission->file_url) }}">
+                                {{ basename($submission->file_url) }}
+                            </a>
+                        </div>
+                        <form action="{{ route('submission.destroy', ['id' => $submission->id]) }}" method="POST" class="mt-2">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="w-full bg-red-500 text-white font-semibold py-3 rounded-lg hover:bg-red-700 transition">
+                                Batalkan Pengiriman
+                            </button>
+                        </form>
+                    </div>
                 </div>
                 @else
                 <!-- Jika belum mengirimkan -->
-                <div class="flex flex-col gap-3">
-                    <p class="text-red-500 font-semibold">Status: Belum Diserahkan</p>
+                <div class="flex flex-col gap-3 ">
                     <form action="{{ route('submission.store', ['kelas' => $kelas->id, 'task' => $task->id]) }}" method="POST" enctype="multipart/form-data" class="flex flex-col gap-4">
                         @csrf
                         <label class="block">
                             <span class="text-gray-700">Unggah File:</span>
-                            <input type="file" name="file" required class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
+                            <input type="file" name="file" required class="block w-full text-base text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
                         </label>
-                        <button type="submit" class="w-full bg-blue-500 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition">
-                            Serahkan Tugas
+                        <button type="submit" class=" flex justify-center items-center gap-2 w-full bg-blue-500 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition">
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                            Upload Tugas
                         </button>
                     </form>
                 </div>
