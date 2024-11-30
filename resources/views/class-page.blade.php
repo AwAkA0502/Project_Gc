@@ -81,7 +81,7 @@
                     @if ($isTeacher)
                         <div id="nilaiTab" class="p-3 font-medium cursor-pointer" onclick="switchTab('nilai')">Nilai</div>
                     @endif        
-                    {{-- <div id="nilaiTab" class="p-3 font-medium cursor-pointer" onclick="switchTab('nilai')">Nilai</div> --}}
+                    <div id="nilaiTab" class="p-3 font-medium cursor-pointer" onclick="switchTab('nilai')">Nilai</div>
    
              </div>
                 <button type="button">
@@ -579,147 +579,54 @@
                             </button>
                         </div>
                         <div id="Content_Tugas1" class="content overflow-auto border-gray-300 border-2 rounded-xl shadow-lg">
-                            <table class="table-fixed w-full ">
+                            <table class="table-fixed w-full">
                                 <thead class="text-left bg-gray-200">
-                                  <tr>
-                                    <th class="py-3 px-3">Nama Siswa</th>
-                                    <th class="py-3">Tanggal Upload</th>
-                                    <th class="py-3">File Upload</th>
-                                    <th class="py-3">Nilai</th>
-                                    <th class="py-3">Komentar</th>
-                                    <th class="py-3"></th>
-                                  </tr>
+                                    <tr>
+                                        <th class="py-3 px-3">Nama User</th>
+                                        <th class="py-3">Tanggal Upload</th>
+                                        <th class="py-3">File Upload</th>
+                                        <th class="py-3">Nilai</th>
+                                        <th class="py-3">Komentar</th>
+                                        <th class="py-3"></th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                  <tr class="border hover:bg-gray-100">
-                                    <td class="flex gap-2 justify-start items-center py-3 px-3">
-                                        <div class="w-10 h-10 p-4 bg-black rounded-full"
-                                        style="background-image: url('Assets/User_Profile2.jpg'); background-size: cover; background-position: center ;"></div>
-                                        <p>Nama Siswa</p>
-                                        </div>
-                                    </td>
-                                    <td>2 Mei 2024, 13.00</td>
-                                    <td>Nama File</td>
-                                    <td>
-                                        <button class="openModalBtn bg-gray-300 py-2 px-3 rounded-lg">
-                                            <p><span>...</span>/100</p>
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2">
-                                    </td>
-                                    <td class="text-center">
-                                        <button class="bg-blue-500 px-5 py-2 text-white rounded-xl">Kirim</button>
-                                    </td>
-                                  </tr>
-                                  <tr class="border hover:bg-gray-100">
-                                    <td class="flex gap-2 justify-start items-center py-3 px-3">
-                                        <div class="w-10 h-10 p-4 bg-black rounded-full"
-                                        style="background-image: url('Assets/User_Profile2.jpg'); background-size: cover; background-position: center ;"></div>
-                                        <p>Nama Siswa</p>
-                                        </div>
-                                    </td>
-                                    <td>2 Mei 2024, 13.00</td>
-                                    <td>Nama File</td>
-                                    <td>
-                                        <button class="openModalBtn bg-gray-300 py-2 px-3 rounded-lg">
-                                            <p><span>...</span>/100</p>
-                                        </button>
-                                        <div id="modalNilai" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-                                            <div class="bg-white p-5 rounded-lg shadow-lg w-1/3">
-                                                <div class="flex justify-between items-center mb-4">
-                                                    <h2 class="text-xl font-semibold">Masukkan Nilai</h2>
-                                                    <button id="closeModalBtn" class="text-gray-500 hover:text-gray-700">&times;</button>
-                                                </div>
-                                                <div class="flex gap-3 justify-center items-center">
-                                                    <input id="numberInput" type="number" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" min="0" max="100">
-                                                    <div class="text-right h-full">
-                                                        <button id="closeModalBtnBottom" class="bg-blue-500 text-white px-4 py-2 rounded-lg h-full">Submit</button>
-                                                    </div>
-                                                </div>
-                                                
+                                    @forelse ($submissions as $submission)
+                                    <tr class="border hover:bg-gray-100">
+                                        <td class="flex gap-2 justify-start items-center py-3 px-3">
+                                            <div class="w-10 h-10 bg-black rounded-full"
+                                                style="background-image: url('{{ $submission->user->profile_picture ?? asset('Assets/User_Profile2.jpg') }}'); background-size: cover; background-position: center;">
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2">
-                                    </td>
-                                    <td class="text-center">
-                                        <button class="bg-blue-500 px-5 py-2 text-white rounded-xl">Kirim</button>
-                                    </td>
-                                  </tr>
-                                  <tr class="border hover:bg-gray-100">
-                                    <td class="flex gap-2 justify-start items-center py-3 px-3">
-                                        <div class="w-10 h-10 p-4 bg-black rounded-full"
-                                        style="background-image: url('Assets/User_Profile2.jpg'); background-size: cover; background-position: center ;"></div>
-                                        <p>Nama Siswa</p>
-                                        </div>
-                                    </td>
-                                    <td>2 Mei 2024, 13.00</td>
-                                    <td>Nama File</td>
-                                    <td>
-                                        <button class="openModalBtn bg-gray-300 py-2 px-3 rounded-lg">
-                                            <p><span>...</span>/100</p>
-                                        </button>
-                                        <div id="modalNilai" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-                                            <div class="bg-white p-5 rounded-lg shadow-lg w-1/3">
-                                                <div class="flex justify-between items-center mb-4">
-                                                    <h2 class="text-xl font-semibold">Masukkan Nilai</h2>
-                                                    <button id="closeModalBtn" class="text-gray-500 hover:text-gray-700">&times;</button>
-                                                </div>
-                                                <div class="flex gap-3 justify-center items-center">
-                                                    <input id="numberInput" type="number" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" min="0" max="100">
-                                                    <div class="text-right h-full">
-                                                        <button id="closeModalBtnBottom" class="bg-blue-500 text-white px-4 py-2 rounded-lg h-full">Submit</button>
-                                                    </div>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2">
-                                    </td>
-                                    <td class="text-center">
-                                        <button class="bg-blue-500 px-5 py-2 text-white rounded-xl">Kirim</button>
-                                    </td>
-                                  </tr>
-                                  <tr class="border hover:bg-gray-100">
-                                    <td class="flex gap-2 justify-start items-center py-3 px-3">
-                                        <div class="w-10 h-10 p-4 bg-black rounded-full"
-                                        style="background-image: url('Assets/User_Profile2.jpg'); background-size: cover; background-position: center ;"></div>
-                                        <p>Nama Siswa</p>
-                                        </div>
-                                    </td>
-                                    <td>2 Mei 2024, 13.00</td>
-                                    <td>Nama File</td>
-                                    <td>
-                                        <button class="openModalBtn bg-gray-300 py-2 px-3 rounded-lg">
-                                            <p><span>...</span>/100</p>
-                                        </button>
-                                        <div id="modalNilai" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-                                            <div class="bg-white p-5 rounded-lg shadow-lg w-1/3">
-                                                <div class="flex justify-between items-center mb-4">
-                                                    <h2 class="text-xl font-semibold">Masukkan Nilai</h2>
-                                                    <button id="closeModalBtn" class="text-gray-500 hover:text-gray-700">&times;</button>
-                                                </div>
-                                                <div class="flex gap-3 justify-center items-center">
-                                                    <input id="numberInput" type="number" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" min="0" max="100">
-                                                    <div class="text-right h-full">
-                                                        <button id="closeModalBtnBottom" class="bg-blue-500 text-white px-4 py-2 rounded-lg h-full">Submit</button>
-                                                    </div>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2">
-                                    </td>
-                                    <td class="text-center">
-                                        <button class="bg-blue-500 px-5 py-2 text-white rounded-xl">Kirim</button>
-                                    </td>
-                                  </tr>
+                                            <p>{{ $submission->user->name ?? 'Tidak diketahui' }}</p>
+                                        </td>
+                                        <td>{{ $submission->created_at->format('d M Y, H:i') }}</td>
+                                        <td>
+                                            <a href="{{ asset('storage/' . $submission->file_url) }}" 
+                                               target="_blank" 
+                                               class="text-blue-500 underline truncate block max-w-[200px]" 
+                                               title="{{ basename($submission->file_url) }}">
+                                               {{ basename($submission->file_url) }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <button class="openModalBtn bg-gray-300 py-2 px-3 rounded-lg">
+                                                <p>{{ $submission->nilai ? $submission->nilai . '/100' : 'Belum dinilai' }}</p>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2" value="{{ $submission->feedback }}">
+                                        </td>
+                                        <td class="text-center">
+                                            <button class="bg-blue-500 px-5 py-2 text-white rounded-xl">Kirim</button>
+                                        </td>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center py-3 text-gray-500">
+                                            Belum ada yang mengumpulkan tugas.
+                                        </td>
+                                    </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>

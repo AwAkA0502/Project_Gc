@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth; // Tambahkan namespace ini
 use Illuminate\Http\Request;
 use App\Models\Kelas;
 
+use App\Models\Submission; // Tambahkan ini
+
+
 class ClassController extends Controller
 {
         public function index()
@@ -112,11 +115,34 @@ public function show($id)
         abort(403, 'Anda tidak memiliki akses ke kelas ini.');
     }
 
+    // Ambil semua tugas dan submissions
+    $submissions = [];
+    $userSubmissionStatus = [];
+    $tasks = $kelas->tasks; // Semua tugas dalam kelas ini
+
+    // Jika guru, ambil semua submissions
+    if ($isTeacher) {
+        $taskIds = $tasks->pluck('id'); // Ambil ID semua tugas
+        $submissions = Submission::with('user')
+            ->whereIn('tugas_id', $taskIds)
+            ->whereNotNull('file_url')
+            ->get();
+    } else {
+        // Jika siswa, ambil status pengumpulan masing-masing tugas
+        foreach ($tasks as $task) {
+            $userSubmissionStatus[$task->id] = Submission::where('tugas_id', $task->id)
+                ->where('user_id', $user->id)
+                ->first();
+        }
+    }
+
     // Kirim data ke view
     return view('class-page', [
         'kelas' => $kelas,
         'isTeacher' => $isTeacher,
-        'tasks' => $kelas->tasks, // Tugas dikirim sebagai variabel tasks
+        'tasks' => $tasks,
+        'submissions' => $submissions,
+        'userSubmissionStatus' => $userSubmissionStatus, // Status untuk siswa
     ]);
 }
 

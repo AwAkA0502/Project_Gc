@@ -5,6 +5,8 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\ClassController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\SubmissionController;
+
 
 
 // Route untuk halaman welcome (default)
@@ -25,9 +27,11 @@ Route::get('/get-classes', [ClassController::class, 'index'])->name('get.classes
 Route::post('/create-class', [ClassController::class, 'create'])->name('create.class');
 Route::get('/my-classes', [ClassController::class, 'getMyClasses'])->name('my.classes');
 Route::get('/class-page/{id}', [ClassController::class, 'show'])->name('class.page');
+Route::get('/class-page/{id}/submissions', [SubmissionController::class, 'index'])->name('class.submissions');
+Route::delete('/submission/{id}', [SubmissionController::class, 'destroy'])->name('submission.destroy');
 Route::post('/kelas/{kelas}/tasks', [TaskController::class, 'store'])->middleware('auth')->name('task.store');
 Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->middleware('auth')->name('task.destroy');
-
+Route::post('/kelas/{kelas}/tasks/{task}/submission', [SubmissionController::class, 'store'])->middleware('auth')->name('submission.store');
 // Route::post('/add-task', [TaskController::class, 'store'])->middleware('auth')->name('task.store');
 
 

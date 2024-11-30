@@ -6,22 +6,40 @@ use Illuminate\Support\Facades\Auth; // Tambahkan ini
 use App\Models\Kelas;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use App\Models\Submission;
 use Illuminate\Support\Facades\Storage;
 
 class TaskController extends Controller
 {
     public function showTaskPage($kelasId, $taskId)
 {
+    $user = Auth::user();
+
     // Ambil kelas berdasarkan kelasId
     $kelas = Kelas::findOrFail($kelasId);
 
     // Ambil tugas berdasarkan taskId
     $task = Task::findOrFail($taskId);
 
-    // Kirim data tugas dan kelas ke view
+    // Pastikan pengguna memiliki akses ke kelas ini
+    $isTeacher = $kelas->guru_id === $user->id;
+    $isMember = $isTeacher || $kelas->users()->where('users.id', $user->id)->exists();
+
+    if (!$isMember) {
+        abort(403, 'Anda tidak memiliki akses ke kelas ini.');
+    }
+
+    // Cek apakah siswa sudah mengirimkan tugas ini
+    $submission = Submission::where('tugas_id', $taskId)
+        ->where('siswa_id', $user->id) // Ganti user_id dengan siswa_id
+        ->first();
+
+    // Kirim data ke view
     return view('task-page', [
         'kelas' => $kelas,
-        'task' => $task, // Pastikan data tugas dikirim ke view
+        'task' => $task,
+        'submission' => $submission, // Data pengiriman untuk siswa
+        'isTeacher' => $isTeacher,
     ]);
 }
 
