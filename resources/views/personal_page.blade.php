@@ -91,43 +91,26 @@
         }
     </style>
 </head>
-<body class="bg-white h-screen flex flex-col">
-    <nav class="flex w- justify-between items-center py-3 px-8 border-b border-black">
-        <div class="flex gap-4 justify-between items-center">
-            <button type="button">
-                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#000000"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-menu-2">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 6l16 0" /><path d="M4 12l16 0" /><path d="M4 18l16 0" /></svg>
-            </button>
-            <h1 class="font-semibold text-2xl">Name</h1>
-        </div>
-        <div class="flex gap-4 justify-between items-center">
-            <button type="button">
-                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-bell"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                    <path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" /><path d="M9 17v1a3 3 0 0 0 6 0v-1" /></svg>
-            </button>
-            <div class="flex flex-col">
-                <div class="flex gap-3 justify-between items-center" id="Account">
-                    <p>{{ auth()->user()->name }}</p>                    <img src="assets/user.png" class="w-10 h-10 cursor-pointer" id="accountImage">
-                </div>
-                <div class="relative">
-                    <div id="dropdownMenu" class="hidden bg-gray-100 p-2 w-full rounded-lg absolute right-0 mt-2">
-                        <button class="p-2 bg-red-500 text-white font-medium w-full rounded-lg">Log out</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+<body class="h-screen flex flex-col" style="background-color: #E0FBE2;">
 	<div>
 		<h3><a th:href="@{/List_users}"></a></h3> 
 		<h3><a th:href="@{/register}"></a></h3>
 		<h3><a th:href="@{/Login}"></a></h3>
 	</div>
-    <section id="Content" class="flex">
+    <section id="Content" class="flex gap-3">
                 @include('partials.sidebar') <!-- Memanggil partial sidebar.blade.php -->
 
         <div id="MainContent" class="w-full flex flex-col gap-3 p-4">
-            <div id="Timeline" class="flex flex-col gap-2">
-                <p class="text-xl font-semibold">Timeline</p>
+            <div class="flex justify-between justify-center items-center">
+                <h1 class="font-bold" style="color: #064420; font-size: 32px;">Hello Nama</h1>
+                <div class="flex gap-4 justify-center items-center">
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="25"  height="25"  viewBox="0 0 24 24"  fill="#618264"  class="icon icon-tabler icons-tabler-filled icon-tabler-bell"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14.235 19c.865 0 1.322 1.024 .745 1.668a3.992 3.992 0 0 1 -2.98 1.332a3.992 3.992 0 0 1 -2.98 -1.332c-.552 -.616 -.158 -1.579 .634 -1.661l.11 -.006h4.471z" /><path d="M12 2c1.358 0 2.506 .903 2.875 2.141l.046 .171l.008 .043a8.013 8.013 0 0 1 4.024 6.069l.028 .287l.019 .289v2.931l.021 .136a3 3 0 0 0 1.143 1.847l.167 .117l.162 .099c.86 .487 .56 1.766 -.377 1.864l-.116 .006h-16c-1.028 0 -1.387 -1.364 -.493 -1.87a3 3 0 0 0 1.472 -2.063l.021 -.143l.001 -2.97a8 8 0 0 1 3.821 -6.454l.248 -.146l.01 -.043a3.003 3.003 0 0 1 2.562 -2.29l.182 -.017l.176 -.004z" /></svg>
+                    <div class="rounded-full bg-black" style="width: 40px; height: 40px; background-color: #89B88D;"> </div>
+                </div>
+            </div>
+            <div id="Timeline" class="flex flex-col gap-3 pl-5 pt-3 pb-5 rounded-2xl" style="background-color : #89B88D;">
+                <p class="text-xl font-semibold text-white">Timeline</p>
+                <p class="text-base font-regular text-white">Cek rentang waktu dan deadline penting dalam pelaksanaan tugas ini.</p>
                 <div class="w-fit gap-3 flex justify-start items-center overflow-x-auto" id="tasksContainer">
                     @forelse ($tasks as $task)
                         <div class="flex flex-col gap-2 p-3 bg-green-400 rounded-xl flex-grow w-fit">
@@ -145,15 +128,29 @@
                     @endforelse
                 </div>
             </div>
-            <div id="Timeline" class="w-full flex flex-col gap-2">
-                <p class="text-xl font-semibold">Kelas saya</p>
-                <div id="cardsContainer" class="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"></div>
+            <div id="Course" class="w-full flex flex-col gap-3 px-5 pt-3 pb-5 rounded-2xl"style="background-color : #89B88D;">
+                <p class="text-xl font-semibold text-white">Course Overview</p>
+                <div id="cardsContainer" class="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                    <div id="card" class="flex flex-col gap-3 pl-3 pr-2 pt-2 pb-3 rounded-xl" style="background-color: #D0E7D2;">
+                        <div class="flex px-1 py-2 justify-between border-b" style="border-color: #618264;">
+                            <div class="flex gap-3">
+                                <div class="rounded-full" style="background-color: #618264; width: 35px; height: 35px;"> </div>
+                                <p class="font-semibold" style="font-size: 14px; color: #064420;">Nama Dosen</p>
+                            </div>
+                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#618264"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            <p class="font-medium" style="color: #064420; font-size: 12px;">Nama Kelas</p>
+                            <p class="font-regular" style="color: #064420; font-size: 12px;">Nama Mata Pelajaran</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div id="SubContent" class="w-54 flex flex-col gap-3 p-5">
-            <div class="w-full flex flex-col gap-3 border border-gray-600 rounded-xl p-3">
-                <p class="text-xl font-medium">Buat Kelas</p>
-                <button id="buatKelasBtn" class="p-2 bg-blue-500 text-white rounded-lg">Buat Kelas</button>
+        <div id="SubContent" class="w-54 flex flex-col gap-5 p-5">
+            <div class="w-full flex flex-col gap-5 rounded-xl p-3" style="background-color: #89B88D;">
+                <p class="text-xl font-semibold text-white">Buat Kelas</p>
+                <button id="buatKelasBtn" class="p-3 rounded-lg font-semibold" style="background-color: #B0D9B1; color: #506C50;">Buat</button>
             </div>
             <div id="modalMakeClass" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
                 <div class="bg-white p-5 rounded-lg shadow-lg w-1/3 flex flex-col gap-2">
@@ -168,16 +165,16 @@
                     <button id="buatKelasModalBtn" class="p-2 bg-blue-500 text-white rounded-lg font-medium">Buat</button>
                 </div>
             </div>
-            <div class="w-full flex flex-col gap-3 border border-gray-600 rounded-xl p-3">
-                <p>Masukkan kode kelas yang diberikan oleh guru Anda di bawah ini.</p>
-                <input type="text" id="classCodeInput" placeholder="Kode Kelas" class="w-full p-3 border rounded-xl border-gray-600">
-                <button id="joinClassBtn" class="w-full p-3 bg-blue-500 text-white rounded-xl">
+            <div class="w-full flex flex-col gap-5 rounded-xl p-3" style="background-color: #89B88D;">
+                <p class="text-xl font-semibold text-white">Masukkan kode kelas yang diberikan oleh guru Anda di bawah ini.</p>
+                <input type="text" id="classCodeInput" placeholder="Kode Kelas" class="w-full p-3 rounded-xl text-white-80 border" style="background-color: #779578; border-color: #618264;">
+                <button id="joinClassBtn" class="w-full p-3 rounded-xl font-semibold" style="background-color: #B0D9B1; color: #506C50;">
                     Gabung Kelas
                 </button>
             </div>
             
-            <div class="w-full flex flex-col gap-3 border border-gray-600 rounded-xl p-3">
-                <p>Calendar</p>
+            <div class="w-full flex flex-col gap-3 rounded-xl p-3" style="background-color: #89B88D;">
+                <p class="text-xl font-semibold text-white">Calendar</p>
                 <div class="calendarwrapper bg-white p-4 rounded-lg shadow-md">
                     <div class="flex justify-between items-center mb-2">
                         <a href="#" class="text-blue-500 hover:text-blue-700" title="Previous month">
@@ -259,7 +256,7 @@
     const dropdown = document.getElementById('dropdownMenu');
     dropdown.classList.toggle('hidden');
 });
-    
+
      document.addEventListener('DOMContentLoaded', function() {
             const buatKelasBtn = document.getElementById('buatKelasBtn');
             const modalMakeClass = document.getElementById('modalMakeClass');
