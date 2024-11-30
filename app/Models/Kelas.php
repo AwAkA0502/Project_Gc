@@ -18,6 +18,11 @@ class Kelas extends Model
         return $this->hasMany(Task::class, 'kelas_id');
     }
     
+    public function dosen()
+    {
+        return $this->belongsTo(User::class, 'guru_id');
+    }
+    
 
     protected $fillable = [
         'nama_kelas',

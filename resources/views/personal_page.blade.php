@@ -132,19 +132,28 @@
             <div id="Course" class="w-full flex flex-col gap-3 px-5 pt-3 pb-5 rounded-2xl"style="background-color : #89B88D;">
                 <p class="text-xl font-semibold text-white">Course Overview</p>
                 <div id="cardsContainer" class="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                    <div id="card" class="flex flex-col gap-3 pl-3 pr-2 pt-2 pb-3 rounded-xl" style="background-color: #D0E7D2;">
-                        <div class="flex px-1 py-2 justify-between border-b" style="border-color: #618264;">
-                            <div class="flex gap-3">
-                                <div class="rounded-full" style="background-color: #618264; width: 35px; height: 35px;"> </div>
-                                <p class="font-semibold" style="font-size: 14px; color: #064420;">Nama Dosen</p>
+                    @foreach ($classes as $kelas)
+                        <div class="flex flex-col gap-3 pl-3 pr-2 pt-2 pb-3 rounded-xl" style="background-color: #D0E7D2;">
+                            <div class="flex px-1 py-2 justify-between border-b" style="border-color: #618264;">
+                                <div class="flex gap-3">
+                                    <div class="rounded-full" style="background-color: #618264; width: 35px; height: 35px;"> </div>
+                                    <p class="font-semibold" style="font-size: 14px; color: #064420;">
+                                        Dosen: {{ $kelas->dosen->name ?? 'Nama tidak ditemukan' }}
+                                    </p>
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#618264" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                </svg>
                             </div>
-                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#618264"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
+                            <div class="flex flex-col gap-3">
+                                <p class="font-medium" style="color: #064420; font-size: 12px;">{{ $kelas->nama_kelas }}</p>
+                                <p class="font-regular" style="color: #064420; font-size: 12px;">{{ $kelas->nama_pelajaran }}</p>
+                            </div>
                         </div>
-                        <div class="flex flex-col gap-3">
-                            <p class="font-medium" style="color: #064420; font-size: 12px;">Nama Kelas</p>
-                            <p class="font-regular" style="color: #064420; font-size: 12px;">Nama Mata Pelajaran</p>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -157,24 +166,20 @@
             </div>
             
             <div id="modalMakeClass" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-                <div class="bg-white p-5 rounded-lg shadow-lg w-1/3 flex flex-col gap-2">
-                    <div class="flex justify-between items-start mb-4 flex-col gap-2 max-h-fit">
-                        <h2 class="text-xl font-semibold">Nama Kelas</h2>
-                        <input id="nameInput" type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
+                <form method="POST" action="{{ route('create.class') }}">
+                    @csrf <!-- Tambahkan CSRF token untuk keamanan -->
+                    <div class="mb-4">
+                        <label for="nama_kelas" class="block text-sm font-medium text-gray-700">Nama Kelas</label>
+                        <input type="text" name="nama_kelas" id="nama_kelas" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
                     </div>
-                    <div class="flex justify-between items-start mb-4 flex-col gap-2 max-h-fit">
-                        <h2 class="text-xl font-semibold">Nama Pelajaran</h2>
-                        <input id="subjectInput" type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
+                    <div class="mb-4">
+                        <label for="nama_pelajaran" class="block text-sm font-medium text-gray-700">Nama Pelajaran</label>
+                        <input type="text" name="nama_pelajaran" id="nama_pelajaran" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
                     </div>
-                    <div class="flex justify-between items-center gap-2">
-                        <button id="closeModalBtn" class="p-2 bg-red-500 text-white rounded-lg font-medium">
-                            Tutup
-                        </button>
-                        <button id="buatKelasModalBtn" class="p-2 bg-blue-500 text-white rounded-lg font-medium">
-                            Buat
-                        </button>
-                    </div>
-                </div>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg">
+                        Buat Kelas
+                    </button>
+                </form>
             </div>
             <div class="w-full flex flex-col gap-5 rounded-xl p-3" style="background-color: #89B88D;">
                 <p class="text-xl font-semibold text-white">Masukkan kode kelas yang diberikan oleh guru Anda di bawah ini.</p>
@@ -264,144 +269,14 @@
 </body>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-    const buatKelasBtn = document.getElementById("buatKelasBtn");
-    const modalMakeClass = document.getElementById("modalMakeClass");
-    const buatKelasModalBtn = document.getElementById("buatKelasModalBtn");
-    const cardsContainer = document.getElementById("cardsContainer");
+        const buatKelasBtn = document.getElementById("buatKelasBtn");
+        const modalMakeClass = document.getElementById("modalMakeClass");
 
-    // Tombol untuk menutup modal
-    const closeModalBtn = document.createElement("button");
-    closeModalBtn.id = "closeModalBtn";
-    closeModalBtn.className = "p-2 bg-red-500 text-white rounded-lg font-medium mt-4";
-    closeModalBtn.innerText = "Tutup";
-
-    if (!document.getElementById("closeModalBtn")) {
-        modalMakeClass.querySelector(".bg-white").appendChild(closeModalBtn);
-    }
-
-    // Tampilkan modal
-    buatKelasBtn.addEventListener("click", () => {
-        modalMakeClass.classList.remove("hidden");
+        // Tampilkan modal
+        buatKelasBtn.addEventListener("click", () => {
+            modalMakeClass.classList.remove("hidden");
+        });
     });
-
-    // Sembunyikan modal
-    closeModalBtn.addEventListener("click", () => {
-        modalMakeClass.classList.add("hidden");
-    });
-
-    // Tutup modal jika klik di luar area modal
-    window.addEventListener("click", (event) => {
-        if (event.target === modalMakeClass) {
-            modalMakeClass.classList.add("hidden");
-        }
-    });
-
-    // Fungsi untuk memuat daftar kelas
-    function loadClasses() {
-        fetch("/my-classes", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                cardsContainer.innerHTML = ""; // Bersihkan card container
-
-                data.kelas.forEach((kelas) => {
-                    const newCard = document.createElement("a");
-                    newCard.href = `/class-page/${kelas.id}`; // Mengarahkan ke halaman kelas berdasarkan ID
-                    newCard.className = "flex flex-col gap-3 pl-3 pr-2 pt-2 pb-3 rounded-xl";
-                    newCard.style.backgroundColor = "#D0E7D2";
-                    newCard.innerHTML = `
-                        <div class="flex px-1 py-2 justify-between border-b" style="border-color: #618264;">
-                            <div class="flex gap-3">
-                                <div class="rounded-full" style="background-color: #618264; width: 35px; height: 35px;"></div>
-                                <p class="font-semibold" style="font-size: 14px; color: #064420;">
-                                    ${kelas.guru?.name || "Dosen Tidak Diketahui"}
-                                </p>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#618264" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                            </svg>
-                        </div>
-                        <div class="flex flex-col gap-3">
-                            <p class="font-medium" style="color: #064420; font-size: 12px;">${kelas.nama_kelas}</p>
-                            <p class="font-regular" style="color: #064420; font-size: 12px;">${kelas.nama_pelajaran}</p>
-                        </div>
-                    `;
-                    cardsContainer.appendChild(newCard);
-                });
-            })
-            .catch((error) => console.error("Error fetching classes:", error));
-    }
-
-    // Fungsi untuk membuat kelas baru
-    buatKelasModalBtn.addEventListener("click", function () {
-        const nameInput = document.getElementById("nameInput").value;
-        const subjectInput = document.getElementById("subjectInput").value;
-
-        if (!nameInput.trim() || !subjectInput.trim()) {
-            alert("Nama kelas dan pelajaran tidak boleh kosong!");
-            return;
-        }
-
-        fetch("/create-class", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
-            },
-            body: JSON.stringify({
-                nama_kelas: nameInput,
-                nama_pelajaran: subjectInput,
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.message === "Kelas berhasil dibuat") {
-                    const newCard = document.createElement("a");
-                    newCard.href = `/class-page/${data.kelas.id}`;
-                    newCard.className = "flex flex-col gap-3 pl-3 pr-2 pt-2 pb-3 rounded-xl";
-                    newCard.style.backgroundColor = "#D0E7D2";
-                    newCard.innerHTML = `
-                        <div class="flex px-1 py-2 justify-between border-b" style="border-color: #618264;">
-                            <div class="flex gap-3">
-                                <div class="rounded-full" style="background-color: #618264; width: 35px; height: 35px;"></div>
-                                <p class="font-semibold" style="font-size: 14px; color: #064420;">
-                                    ${data.kelas.guru?.name || "Dosen Tidak Diketahui"}
-                                </p>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#618264" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                            </svg>
-                        </div>
-                        <div class="flex flex-col gap-3">
-                            <p class="font-medium" style="color: #064420; font-size: 12px;">${data.kelas.nama_kelas}</p>
-                            <p class="font-regular" style="color: #064420; font-size: 12px;">${data.kelas.nama_pelajaran}</p>
-                        </div>
-                    `;
-                    cardsContainer.appendChild(newCard);
-
-                    modalMakeClass.classList.add("hidden");
-                    document.getElementById("nameInput").value = "";
-                    document.getElementById("subjectInput").value = "";
-                } else {
-                    alert("Terjadi kesalahan: " + data.message);
-                }
-            })
-            .catch((error) => console.error("Error:", error));
-    });
-
-    loadClasses(); // Memuat kelas saat halaman dimuat
-});
 </script>
 
 <script>
