@@ -22,16 +22,30 @@ Route::post('/register', [UsersController::class, 'register'])->name('register')
 Route::get('/login', [UsersController::class, 'getLoginPage'])->name('login_page');
 Route::post('/login', [UsersController::class, 'login'])->name('login');
 
-Route::post('/join-class', [ClassController::class, 'join'])->name('join.class');
+// Kelas Routes
+Route::prefix('kelas')->group(function () {
+    Route::post('/join', [ClassController::class, 'join'])->name('join.class');
+    Route::post('/create', [ClassController::class, 'create'])->name('create.class');
+    Route::get('/my-classes', [ClassController::class, 'getMyClasses'])->name('my.classes');
+    Route::get('/class-list', [ClassController::class, 'index'])->name('class.list');
+    Route::get('/class-page/{id}', [ClassController::class, 'show'])->name('class.page');
+});
+
+// Submission Routes
+Route::prefix('submissions')->group(function () {
+    Route::get('/class-page/{id}', [SubmissionController::class, 'index'])->name('class.submissions');
+    Route::delete('/{id}', [SubmissionController::class, 'destroy'])->name('submission.destroy');
+    Route::post('/kelas/{kelas}/tasks/{task}', [SubmissionController::class, 'store'])->middleware('auth')->name('submission.store');
+});
+
+// Task Routes
+Route::prefix('tasks')->group(function () {
+    Route::post('/kelas/{kelas}', [TaskController::class, 'store'])->middleware('auth')->name('task.store');
+    Route::delete('/{task}', [TaskController::class, 'destroy'])->middleware('auth')->name('task.destroy');
+});
+
+// General Routes
 Route::get('/get-classes', [ClassController::class, 'index'])->name('get.classes');
-Route::post('/create-class', [ClassController::class, 'create'])->name('create.class');
-Route::get('/my-classes', [ClassController::class, 'getMyClasses'])->name('my.classes');
-Route::get('/class-page/{id}', [ClassController::class, 'show'])->name('class.page');
-Route::get('/class-page/{id}/submissions', [SubmissionController::class, 'index'])->name('class.submissions');
-Route::delete('/submission/{id}', [SubmissionController::class, 'destroy'])->name('submission.destroy');
-Route::post('/kelas/{kelas}/tasks', [TaskController::class, 'store'])->middleware('auth')->name('task.store');
-Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->middleware('auth')->name('task.destroy');
-Route::post('/kelas/{kelas}/tasks/{task}/submission', [SubmissionController::class, 'store'])->middleware('auth')->name('submission.store');
 // Route::post('/add-task', [TaskController::class, 'store'])->middleware('auth')->name('task.store');
 
 

@@ -110,10 +110,8 @@ class UsersController extends Controller
     // Menampilkan halaman personal setelah login
     public function getPersonalPage()
 {
-    // Ambil pengguna yang sedang login
     $user = Auth::user();
 
-    // Periksa apakah pengguna sudah login
     if (!$user) {
         return redirect()->route('login_page')->withErrors('Silakan login terlebih dahulu.');
     }
@@ -126,14 +124,12 @@ class UsersController extends Controller
             return $task !== null; // Hapus tugas yang nilainya null
         });
 
-    // Ambil semua kelas yang diikuti pengguna beserta data dosennya
-    $classes = $user->kelas()->with('dosen')->get(); // Pastikan relasi dosen() sudah benar
+    // Debugging data
 
-    // Kirim data pengguna, tugas, dan kelas ke view
     return view('personal_page', [
-        'userLogin' => $user->login, // Nama pengguna
-        'tasks' => $tasks, // Semua tugas yang diikuti pengguna
-        'classes' => $classes, // Semua kelas yang diikuti pengguna
+        'userLogin' => $user->login,
+        'tasks' => $tasks, // Pastikan ini dikirim ke view
+        'classes' => $user->kelas()->with('dosen')->get(),
     ]);
 }
 }
