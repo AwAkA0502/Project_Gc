@@ -9,10 +9,11 @@ class Task extends Model
 {
     use HasFactory;
 
+    // Model Task
     public function kelas()
-{
-    return $this->belongsTo(Kelas::class, 'kelas_id'); // 'kelas_id' adalah foreign key di tabel tugas
-}
+    {
+        return $this->belongsTo(Kelas::class, 'kelas_id', 'id');
+    }
 
     // Pastikan tabel yang digunakan adalah "tugas"
     protected $table = 'tugas';
