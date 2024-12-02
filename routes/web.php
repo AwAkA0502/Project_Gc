@@ -11,8 +11,8 @@ use App\Http\Controllers\SubmissionController;
 
 // Route untuk halaman welcome (default)
 Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+    return view('login_page');
+})->name('login');
 
 // Route untuk halaman register dan proses registrasi
 Route::get('/register', [UsersController::class, 'getRegisterPage'])->name('register_page');
