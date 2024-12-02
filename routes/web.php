@@ -33,6 +33,7 @@ Route::prefix('kelas')->group(function () {
 
 // Submission Routes
 Route::prefix('submissions')->group(function () {
+    Route::put('/submission/{id}', [SubmissionController::class, 'update'])->name('submission.update');
     Route::get('/class-page/{id}', [SubmissionController::class, 'index'])->name('class.submissions');
     Route::delete('/{id}', [SubmissionController::class, 'destroy'])->name('submission.destroy');
     Route::post('/kelas/{kelas}/tasks/{task}', [SubmissionController::class, 'store'])->middleware('auth')->name('submission.store');

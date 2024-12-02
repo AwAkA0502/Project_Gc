@@ -84,4 +84,28 @@ public function destroy($id)
 
     return back()->with('success', 'Pengiriman berhasil dibatalkan.');
 }
+
+public function update(Request $request, $id)
+{
+    // Validasi input
+    $request->validate([
+        'siswa_id' => 'required|exists:users,id', // Sesuaikan relasi dengan tabel users
+        'nilai' => 'required|numeric|min:0|max:100',
+        'feedback' => 'required|string|max:255',
+    ]);
+
+    // Cari record submission berdasarkan ID dan siswa_id
+    $submission = Submission::where('id', $id)
+        ->where('siswa_id', $request->input('siswa_id'))
+        ->firstOrFail();
+
+    // Perbarui data submission
+    $submission->update([
+        'nilai' => $request->input('nilai'),
+        'feedback' => $request->input('feedback'),
+    ]);
+
+    // Redirect kembali dengan pesan sukses
+    return redirect()->back()->with('success', 'Nilai dan feedback berhasil diperbarui.');
+}
 }
