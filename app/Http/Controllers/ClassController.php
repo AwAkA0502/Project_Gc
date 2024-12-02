@@ -130,7 +130,7 @@ public function show($id)
         // Jika siswa, ambil status pengumpulan masing-masing tugas
         foreach ($tasks as $task) {
             $userSubmissionStatus[$task->id] = Submission::where('tugas_id', $task->id)
-                ->where('user_id', $user->id)
+                ->where('siswa_id', $user->id) // Change user_id to siswa_id
                 ->first();
         }
     }

@@ -179,22 +179,60 @@
                 </button>
             </div>
             
-            <div id="modalMakeClass" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-                <form method="POST" action="{{ route('create.class') }}">
-                    @csrf <!-- Tambahkan CSRF token untuk keamanan -->
-                    <div class="mb-4">
-                        <label for="nama_kelas" class="block text-sm font-medium text-gray-700">Nama Kelas</label>
-                        <input type="text" name="nama_kelas" id="nama_kelas" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
-                    </div>
-                    <div class="mb-4">
-                        <label for="nama_pelajaran" class="block text-sm font-medium text-gray-700">Nama Pelajaran</label>
-                        <input type="text" name="nama_pelajaran" id="nama_pelajaran" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
-                    </div>
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg">
-                        Buat Kelas
-                    </button>
-                </form>
+            <div
+    id="modalMakeClass"
+    class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50"
+>
+    <div class="bg-white rounded-lg shadow-lg p-6 relative w-full max-w-md">
+        <!-- Tombol Close (X) -->
+        <button
+            id="closeModalBtn"
+            class="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+        >
+            &times;
+        </button>
+        <!-- Form -->
+        <form method="POST" action="{{ route('create.class') }}">
+            @csrf <!-- Tambahkan CSRF token untuk keamanan -->
+            <div class="mb-4">
+                <label
+                    for="nama_kelas"
+                    class="block text-sm font-medium text-gray-700"
+                >
+                    Nama Kelas
+                </label>
+                <input
+                    type="text"
+                    name="nama_kelas"
+                    id="nama_kelas"
+                    required
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+                />
             </div>
+            <div class="mb-4">
+                <label
+                    for="nama_pelajaran"
+                    class="block text-sm font-medium text-gray-700"
+                >
+                    Nama Pelajaran
+                </label>
+                <input
+                    type="text"
+                    name="nama_pelajaran"
+                    id="nama_pelajaran"
+                    required
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+                />
+            </div>
+            <button
+                type="submit"
+                class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+            >
+                Buat Kelas
+            </button>
+        </form>
+    </div>
+</div>
             <div class="w-full flex flex-col gap-5 rounded-xl p-3" style="background-color: #89B88D;">
                 <p class="text-xl font-semibold text-white">Masukkan kode kelas yang diberikan oleh guru Anda di bawah ini.</p>
                 <form method="POST" action="{{ route('join.class') }}">
@@ -289,14 +327,27 @@
 </body>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        const buatKelasBtn = document.getElementById("buatKelasBtn");
-        const modalMakeClass = document.getElementById("modalMakeClass");
+    const buatKelasBtn = document.getElementById("buatKelasBtn");
+    const modalMakeClass = document.getElementById("modalMakeClass");
+    const closeModalBtn = document.getElementById("closeModalBtn");
 
-        // Tampilkan modal
-        buatKelasBtn.addEventListener("click", () => {
-            modalMakeClass.classList.remove("hidden");
-        });
+    // Tampilkan modal
+    buatKelasBtn.addEventListener("click", () => {
+        modalMakeClass.classList.remove("hidden");
     });
+
+    // Tutup modal dengan tombol "X"
+    closeModalBtn.addEventListener("click", () => {
+        modalMakeClass.classList.add("hidden");
+    });
+
+    // Tutup modal dengan mengklik area di luar modal
+    modalMakeClass.addEventListener("click", (event) => {
+        if (event.target === modalMakeClass) {
+            modalMakeClass.classList.add("hidden");
+        }
+    });
+});
 </script>
 
 <script>
