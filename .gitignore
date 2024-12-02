@@ -20,3 +20,4 @@ yarn-error.log
 /.vscode
 /.zed
 output.css
+resources/static/output.css
