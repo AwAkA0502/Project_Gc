@@ -81,10 +81,10 @@
         }
     </style>
 </head>
-<body>
-
-    <div class="registration-container">
-        <h2>Welcome to the Registration Session</h2>
+<body class="w-full flex h-screen">
+    <img src="{{ asset('Assets/Bg_Login.png') }}" alt="login image" class="w-full" style="margin-right: -10px;">
+    <div class="registration-container px-20 flex flex-col gap-16 rounded-l-xl h-full justify-center" id="login-field" style="background-color: #89B88D; width: 800px;">
+        <h2 class="font-semibold text-white" style="font-size: 40px;">Create Account</h2>
         
         @if ($errors->any())
             <div class="alert">
@@ -96,25 +96,25 @@
             </div>
         @endif
         
-        <form method="POST" action="{{ route('register') }}">
+        <form method="POST" action="{{ route('register') }}" class="flex flex-col gap-5">
             @csrf
             <div class="form-group">
                 <label for="input_login">Username</label>
-                <input id="input_login" name="login" placeholder="Enter your username" type="text" required>
+                <input id="input_login" class="h-11 w-full rounded-xl border p-2 text-white text-base" style="background-color: #779578; border-color: #618264;" name="login" placeholder="Enter your username" type="text" required>
             </div>
             <div class="form-group">
                 <label for="input_password">Password</label>
-                <input id="input_password" name="password" placeholder="Enter your password" type="password" required>
+                <input id="input_password" class="h-11 w-full rounded-xl border p-2 text-white text-base" style="background-color: #779578; border-color: #618264;" name="password" placeholder="Enter your password" type="password" required>
             </div>
             <div class="form-group">
                 <label for="input_email">Email</label>
-                <input id="input_email" name="email" placeholder="Enter your email" type="email" required>
+                <input id="input_email" class="h-11 w-full rounded-xl border p-2 text-white text-base" style="background-color: #779578; border-color: #618264;" name="email" placeholder="Enter your email" type="email" required>
             </div>
             <div class="form-group">
-                <input class="submit-btn" type="submit" value="Register">
+                <input class="btn-animate rounded-xl py-3  w-full font-medium text-xl" style="background-color: #B0D9B1; color: #506C50;" type="submit" value="Register">
             </div>
             <div class="login-link">
-                <p>Already registered? <a href="{{ route('login') }}">Login here</a></p>
+                <p>Already registered? <a href="{{ route('login') }}" >Login here</a></p>
             </div>
         </form>
     </div>
