@@ -3,87 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
     <title>Register Page</title>
-    <link rel="stylesheet" href="{{ asset('static/css/login_page_style.css') }}">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .registration-container {
-            background-color: #ffffff;
-            padding: 40px 60px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-            width: 100%;
-        }
-        .registration-container h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #333;
-            font-size: 24px;
-        }
-        .registration-container .form-group {
-            margin-bottom: 15px;
-        }
-        .registration-container input {
-            width: calc(100% - 20px);
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-        .registration-container .submit-btn {
-            width: 100%;
-            padding: 12px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 18px;
-            transition: background-color 0.3s ease;
-        }
-        .registration-container .submit-btn:hover {
-            background-color: #0056b3;
-        }
-        .registration-container label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-size: 16px;
-        }
-        .login-link {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .login-link a {
-            color: #007bff;
-            text-decoration: none;
-            font-size: 16px;
-        }
-        .login-link a:hover {
-            text-decoration: underline;
-        }
-        .alert {
-            color: red;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-    </style>
 </head>
 <body class="w-full flex h-screen">
     <img src="{{ asset('Assets/Bg_Login.png') }}" alt="login image" class="w-full" style="margin-right: -10px;">
-    <div class="registration-container px-20 flex flex-col gap-16 rounded-l-xl h-full justify-center" id="login-field" style="background-color: #89B88D; width: 800px;">
+    <div class="px-20 flex flex-col gap-16 rounded-l-2xl h-full justify-center" style="background-color: #89B88D; width: 840px;">
         <h2 class="font-semibold text-white" style="font-size: 40px;">Create Account</h2>
         
         @if ($errors->any())
@@ -98,25 +23,27 @@
         
         <form method="POST" action="{{ route('register') }}" class="flex flex-col gap-5">
             @csrf
-            <div class="form-group">
-                <label for="input_login">Username</label>
+            <div class="form-group flex flex-col gap-1">
+                <label for="input_login" class="text-white text-base">Username</label>
                 <input id="input_login" class="h-11 w-full rounded-xl border p-2 text-white text-base" style="background-color: #779578; border-color: #618264;" name="login" placeholder="Enter your username" type="text" required>
             </div>
-            <div class="form-group">
-                <label for="input_password">Password</label>
+            <div class="form-group flex flex-col gap-1">
+                <label for="input_password" class="text-white text-base">Password</label>
                 <input id="input_password" class="h-11 w-full rounded-xl border p-2 text-white text-base" style="background-color: #779578; border-color: #618264;" name="password" placeholder="Enter your password" type="password" required>
             </div>
             <div class="form-group">
-                <label for="input_email">Email</label>
+                <label for="input_email" class="text-white text-base">Email</label>
                 <input id="input_email" class="h-11 w-full rounded-xl border p-2 text-white text-base" style="background-color: #779578; border-color: #618264;" name="email" placeholder="Enter your email" type="email" required>
             </div>
             <div class="form-group">
                 <input class="btn-animate rounded-xl py-3  w-full font-medium text-xl" style="background-color: #B0D9B1; color: #506C50;" type="submit" value="Register">
             </div>
-            <div class="login-link">
-                <p>Already registered? <a href="{{ route('login') }}" >Login here</a></p>
-            </div>
         </form>
+        <div class="flex gap-1 justify-center items-center">
+            <p class="text-white text-base">Sudah Punya Akun? 
+                <a href="{{ route('login') }}" class="text-base" style="color: #064420;">Daftar Disini</a>
+            </p>
+        </div>
     </div>
 
 </body>
