@@ -13,9 +13,15 @@ class Kelas extends Model
         return $this->belongsToMany(User::class, 'user_kelas', 'kelas_id', 'user_id')->withTimestamps();
     }
 
-        public function tasks()
+        // Model Kelas
+    public function tasks()
     {
-        return $this->hasMany(Task::class, 'kelas_id');
+        return $this->hasMany(Task::class, 'kelas_id', 'id');
+    }
+    
+    public function dosen()
+    {
+        return $this->belongsTo(User::class, 'guru_id');
     }
     
 

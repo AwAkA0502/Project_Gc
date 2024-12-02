@@ -109,24 +109,27 @@ class UsersController extends Controller
 
     // Menampilkan halaman personal setelah login
     public function getPersonalPage()
-    {
-        // Ambil pengguna yang sedang login
-        $user = Auth::user();
-        
-    
-        if (!$user) {
-            return redirect()->route('login_page')->withErrors('Silakan login terlebih dahulu.');
-        }
-    
-        // Ambil semua tugas dari kelas yang diikuti pengguna
-        $tasks = $user->kelas()->with('tasks')->get()->pluck('tasks')->flatten()->filter(function ($task) {
-            return $task !== null;
-        });    
-        
-        // Kirim data pengguna dan tugas ke view
-        return view('personal_page', [
-            'userLogin' => $user->login, // Nama pengguna
-            'tasks' => $tasks, // Semua tugas yang diikuti pengguna
-        ]);
+{
+    $user = Auth::user();
+
+    if (!$user) {
+        return redirect()->route('login_page')->withErrors('Silakan login terlebih dahulu.');
     }
+
+    // Ambil semua tugas dari kelas yang diikuti pengguna
+    $tasks = $user->kelas()->with('tasks')->get()
+        ->pluck('tasks') // Ambil hanya data tugas dari relasi
+        ->flatten() // Flatten array multi-dimensional menjadi satu dimensi
+        ->filter(function ($task) {
+            return $task !== null; // Hapus tugas yang nilainya null
+        });
+
+    // Debugging data
+
+    return view('personal_page', [
+        'userLogin' => $user->login,
+        'tasks' => $tasks, // Pastikan ini dikirim ke view
+        'classes' => $user->kelas()->with('dosen')->get(),
+    ]);
+}
 }

@@ -81,7 +81,7 @@
                     @if ($isTeacher)
                         <div id="nilaiTab" class="p-3 font-medium cursor-pointer" onclick="switchTab('nilai')">Nilai</div>
                     @endif        
-                    <div id="nilaiTab" class="p-3 font-medium cursor-pointer" onclick="switchTab('nilai')">Nilai</div>
+                    {{-- <div id="nilaiTab" class="p-3 font-medium cursor-pointer" onclick="switchTab('nilai')">Nilai</div> --}}
    
              </div>
                 <button type="button">
@@ -593,32 +593,73 @@
                                 <tbody>
                                     @forelse ($submissions as $submission)
                                     <tr class="border hover:bg-gray-100">
-                                        <td class="flex gap-2 justify-start items-center py-3 px-3">
-                                            <div class="w-10 h-10 bg-black rounded-full"
-                                                style="background-image: url('{{ $submission->user->profile_picture ?? asset('Assets/User_Profile2.jpg') }}'); background-size: cover; background-position: center;">
-                                            </div>
-                                            <p>{{ $submission->user->name ?? 'Tidak diketahui' }}</p>
-                                        </td>
-                                        <td>{{ $submission->created_at->format('d M Y, H:i') }}</td>
-                                        <td>
-                                            <a href="{{ asset('storage/' . $submission->file_url) }}" 
-                                               target="_blank" 
-                                               class="text-blue-500 underline truncate block max-w-[200px]" 
-                                               title="{{ basename($submission->file_url) }}">
-                                               {{ basename($submission->file_url) }}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <button class="openModalBtn bg-gray-300 py-2 px-3 rounded-lg">
-                                                <p>{{ $submission->nilai ? $submission->nilai . '/100' : 'Belum dinilai' }}</p>
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2" value="{{ $submission->feedback }}">
-                                        </td>
-                                        <td class="text-center">
-                                            <button class="bg-blue-500 px-5 py-2 text-white rounded-xl">Kirim</button>
-                                        </td>
+                                        <form action="{{ route('submission.update', $submission->id) }}" method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            @method('PUT')
+                            
+                                            <!-- Nama User -->
+                                            <td>
+                                                <div class="p-3 flex items-center">
+                                                    <!-- Foto Profil -->
+                                                    <div class="w-10 h-10 bg-black rounded-full"
+                                                        style="background-image: url('{{ $submission->user->profile_picture ?? asset('Assets/User_Profile2.jpg') }}'); background-size: cover; background-position: center;">
+                                                    </div>
+                                                    <!-- Nama -->
+                                                    <p class="ml-3">{{ $submission->user->name ?? 'Tidak diketahui' }}</p>
+                                                </div>
+                                            </td>
+                            
+                                            <!-- Tanggal Upload -->
+                                            <td>{{ $submission->created_at->format('d M Y, H:i') }}</td>
+                            
+                                            <!-- File Upload -->
+                                            <td>
+                                                <a href="{{ asset('storage/' . $submission->file_url) }}" 
+                                                   target="_blank" 
+                                                   class="text-blue-500 underline truncate block max-w-[200px]" 
+                                                   title="{{ basename($submission->file_url) }}">
+                                                   {{ basename($submission->file_url) }}
+                                                </a>
+                                            </td>
+                            
+                                            <!-- Nilai -->
+                                            <td>
+                                                <input
+                                                    type="number"
+                                                    name="nilai"
+                                                    class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full"
+                                                    placeholder="Masukkan nilai (0-100)"
+                                                    min="0"
+                                                    max="100"
+                                                    value="{{ $submission->nilai }}"
+                                                    required
+                                                />
+                                            </td>
+                            
+                                            <!-- Komentar -->
+                                            <td>
+                                                <textarea
+                                                    name="feedback"
+                                                    class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full"
+                                                    rows="4"
+                                                    placeholder="Masukkan feedback di sini"
+                                                    required
+                                                >{{ $submission->feedback }}</textarea>
+                                            </td>
+                            
+                                            <!-- Hidden Input untuk user_id -->
+                                            <input type="hidden" name="user_id" value="{{ $submission->user->id }}">
+                            
+                                            <!-- Submit Button -->
+                                            <td class="text-center">
+                                                <button
+                                                    type="submit"
+                                                    class="bg-blue-500 px-5 py-2 text-white rounded-xl"
+                                                >
+                                                    Kirim
+                                                </button>
+                                            </td>
+                                        </form>
                                     </tr>
                                     @empty
                                     <tr>
@@ -634,11 +675,71 @@
                         <div id="Content_Tugas3" class="content hidden">Content for Tugas 3</div>
                         <div id="Content_Tugas4" class="content hidden">Content for Tugas 4</div>
                     </div>
+                    <div id="nilaiModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h2 class="text-lg font-bold mb-4">Input Nilai</h2>
+                            <form id="nilaiForm">
+                                <input
+                                    type="number"
+                                    id="nilaiInput"
+                                    class="w-full p-2 border border-gray-300 rounded-lg mb-4"
+                                    placeholder="Masukkan nilai (0-100)"
+                                    min="0"
+                                    max="100"
+                                    required
+                                />
+                                <div class="flex justify-end">
+                                    <button
+                                        type="button"
+                                        id="closeModalBtn"
+                                        class="bg-gray-300 py-2 px-4 rounded-lg mr-2"
+                                    >Batal</button>
+                                    <button
+                                        type="submit"
+                                        class="bg-blue-500 text-white py-2 px-4 rounded-lg"
+                                    >Simpan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
     </section>
 </body>
+<script>
+    // Ambil elemen
+    const openModalBtn = document.getElementById('openModalBtn');
+    const modal = document.getElementById('nilaiModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const nilaiText = document.getElementById('nilaiText');
+    const nilaiForm = document.getElementById('nilaiForm');
+    const nilaiInput = document.getElementById('nilaiInput');
+
+    // Buka modal
+    openModalBtn.addEventListener('click', () => {
+        modal.classList.remove('hidden');
+    });
+
+    // Tutup modal
+    closeModalBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
+    });
+
+    // Submit nilai
+    nilaiForm.addEventListener('submit', (e) => {
+        e.preventDefault(); // Mencegah reload halaman
+        const nilai = nilaiInput.value;
+        if (nilai >= 0 && nilai <= 100) {
+            nilaiText.textContent = `${nilai}/100`;
+            modal.classList.add('hidden'); // Tutup modal
+            nilaiInput.value = ''; // Kosongkan input
+        } else {
+            alert('Masukkan nilai antara 0-100.');
+        }
+    });
+</script>
 <script>
 
 const uploadButton = document.getElementById('uploadButton');
