@@ -14,6 +14,11 @@ Route::get('/', function () {
     return view('login_page');
 })->name('login');
 
+// Routes untuk tugas
+Route::resource('task', TaskController::class);
+// Routes untuk pengumpulan tugas
+Route::resource('submission', SubmissionController::class);
+
 // Route untuk halaman register dan proses registrasi
 Route::get('/register', [UsersController::class, 'getRegisterPage'])->name('register_page');
 Route::post('/register', [UsersController::class, 'register'])->name('register');
@@ -29,6 +34,10 @@ Route::prefix('kelas')->group(function () {
     Route::get('/my-classes', [ClassController::class, 'getMyClasses'])->name('my.classes');
     Route::get('/class-list', [ClassController::class, 'index'])->name('class.list');
     Route::get('/class-page/{id}', [ClassController::class, 'show'])->name('class.page');
+
+    // Tambahkan rute untuk forum dan nilai
+    Route::get('/{id}/forum', [ClassController::class, 'forum'])->name('class.forum');
+    Route::get('/{id}/nilai', [ClassController::class, 'nilai'])->name('class.nilai');
 });
 
 // Submission Routes

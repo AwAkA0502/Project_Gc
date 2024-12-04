@@ -15,6 +15,11 @@ class Task extends Model
         return $this->belongsTo(Kelas::class, 'kelas_id', 'id');
     }
 
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class, 'tugas_id', 'id'); // Relasi ke submission
+    }
+
     // Pastikan tabel yang digunakan adalah "tugas"
     protected $table = 'tugas';
 

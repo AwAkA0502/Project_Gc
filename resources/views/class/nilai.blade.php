@@ -1,0 +1,191 @@
+@extends('layouts.class-page')
+
+@section('title', 'Nilai Kelas')
+
+@section('nilai-tab-class', 'font-bold')
+@section('nilai-tab-border', 'border-blue-500')
+
+@section('content')
+<div id="nilaiContent" class="tab-content flex flex-col gap-1 px-4">
+    <div id="Chip_Field" class="flex p-3 gap-3">
+        @foreach ($tasks as $task)
+        <div id="ChipContainer-{{ $task->id }}" class="chip-container justify-center items-center flex gap-2 bg-green-800 rounded-xl px-2">
+            <button
+                id="Chip-{{ $task->id }}"
+                class="chip flex justify-center items-center px-3 py-2 rounded-xl"
+                onclick="showTaskContent('{{ $task->id }}')"
+            >
+                <p class="text-white font-medium">{{ $task->judul }}</p>
+            </button>
+            <!-- Tombol Delete -->
+            <form method="POST" action="{{ route('task.destroy', ['task' => $task->id]) }}" onsubmit="return confirm('Hapus tugas ini?')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="border-none text-white rounded-lg hover:bg-red-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M18 6l-12 12" />
+                        <path d="M6 6l12 12" />
+                    </svg>
+                </button>
+            </form>
+        </div>
+        @endforeach
+    
+        @if ($isTeacher)
+        <button id="NewTask" class="flex justify-center items-center px-3 py-2 border rounded-xl gap-2 bg-blue-500 text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M12 5l0 14" />
+                <path d="M5 12l14 0" />
+            </svg>
+            <p class="font-medium">Buat Tugas</p>
+        </button>
+        @endif
+    </div>
+
+<div id="Content_Field" class="p-3 w-full gap-3 flex flex-col border rounded-lg">
+    <p class="text-lg font-medium">Pilih tugas untuk melihat detail</p>
+</div>
+
+    
+    <!-- Modal untuk membuat tugas -->
+    <div id="modalNewTask" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-96 relative">
+            <button id="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 6L6 18"></path>
+                    <path d="M6 6L18 18"></path>
+                </svg>
+            </button>
+    
+            <form method="POST" action="{{ route('task.store', ['kelas' => $kelas->id]) }}" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
+                
+                <!-- Form fields -->
+                <div class="flex flex-col gap-2">
+                    <label for="judul">Judul</label>
+                    <input name="judul" id="judul" type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" required>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="deskripsi">Deskripsi</label>
+                    <input name="deskripsi" id="deskripsi" type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
+                </div>
+                <div class="flex flex-row gap-3">
+                    <div class="flex flex-col gap-2">
+                        <label for="deadline">Deadline</label>
+                        <input name="deadline" id="deadline" type="date" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" required>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label for="waktu">Waktu</label>
+                        <input name="waktu" id="waktu" type="time" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
+                    </div>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="nilai">Nilai</label>
+                    <input name="nilai" id="nilai" type="number" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" min="0" max="100">
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="file">File</label>
+                    <input name="file" id="file" type="file" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
+                </div>
+                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4">Simpan Tugas</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal untuk membuat tugas -->
+    <div id="modalNewTask" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-96 relative">
+            <button id="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 6L6 18"></path>
+                    <path d="M6 6L18 18"></path>
+                </svg>
+            </button>
+    
+            <form method="POST" action="{{ route('task.store', ['kelas' => $kelas->id]) }}" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
+                
+                <!-- Form fields -->
+                <div class="flex flex-col gap-2">
+                    <label for="judul">Judul</label>
+                    <input name="judul" id="judul" type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" required>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="deskripsi">Deskripsi</label>
+                    <input name="deskripsi" id="deskripsi" type="text" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
+                </div>
+                <div class="flex flex-row gap-3">
+                    <div class="flex flex-col gap-2">
+                        <label for="deadline">Deadline</label>
+                        <input name="deadline" id="deadline" type="date" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" required>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label for="waktu">Waktu</label>
+                        <input name="waktu" id="waktu" type="time" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
+                    </div>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="nilai">Nilai</label>
+                    <input name="nilai" id="nilai" type="number" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" min="0" max="100">
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="file">File</label>
+                    <input name="file" id="file" type="file" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full">
+                </div>
+                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4">Simpan Tugas</button>
+            </form>
+        </div>
+    </div>
+    <div id="Content_Field" class="p-3 w-full gap-3 flex flex-col">
+        <div class="flex w-full justify-between items-end">
+            <h1 class="font-semibold text-2xl">{{ $task->judul }}</h1>
+            <div class="flex gap-3 justify-center items-end">
+                <p class="text-md font-medium">Deadline : <span>{{ $task->deadline ?? 'Tidak Ada' }}</span></p>
+                <p class="text-md font-medium">Submited <span>{{ count($submissions) }}/30</span></p>
+            </div>
+        </div>
+        <div class="flex justify-between items-center gap-3">
+            <input type="search" class="w-full px-3 py-2 border-2 border-gray-500 rounded-xl focus:border-none focus:outline-none" placeholder="Cari...">
+            <button class="flex justify-between items-center border-2 border-gray-600 px-3 py-2 rounded-lg">
+                <p>Filter</p>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-caret-down">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 10l6 6l6 -6h-12" /></svg>
+            </button>
+        </div>
+        <!-- Include komponen task-content -->
+        @include('components.task-content', ['submissions' => $submissions, 'task' => $task])
+    </div>
+    <div id="nilaiModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-lg font-bold mb-4">Input Nilai</h2>
+            <form id="nilaiForm">
+                <input
+                    type="number"
+                    id="nilaiInput"
+                    class="w-full p-2 border border-gray-300 rounded-lg mb-4"
+                    placeholder="Masukkan nilai (0-100)"
+                    min="0"
+                    max="100"
+                    required
+                />
+                <div class="flex justify-end">
+                    <button
+                        type="button"
+                        id="closeModalBtn"
+                        class="bg-gray-300 py-2 px-4 rounded-lg mr-2"
+                    >Batal</button>
+                    <button
+                        type="submit"
+                        class="bg-blue-500 text-white py-2 px-4 rounded-lg"
+                    >Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+</div>
+@endsection

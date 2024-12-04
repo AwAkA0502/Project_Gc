@@ -12,6 +12,11 @@ class Submission extends Model
     return $this->belongsTo(User::class, 'siswa_id'); // Kolom siswa_id mengacu ke tabel users
 }
 
+public function tugas()
+{
+    return $this->belongsTo(Tugas::class, 'tugas_id', 'id'); // Relasi ke tugas
+}
+
     use HasFactory;
 
     protected $table = 'submission'; // Nama tabel Anda
