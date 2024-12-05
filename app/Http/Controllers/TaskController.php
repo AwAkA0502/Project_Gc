@@ -31,8 +31,8 @@ class TaskController extends Controller
 
     // Cek apakah siswa sudah mengirimkan tugas ini
     $submission = Submission::where('tugas_id', $taskId)
-        ->where('siswa_id', $user->id) // Ganti user_id dengan siswa_id
-        ->first();
+    ->where('siswa_id', $user->id)
+    ->first();
 
     // Kirim data ke view
     return view('task-page', [

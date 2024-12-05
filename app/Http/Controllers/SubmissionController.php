@@ -47,14 +47,16 @@ public function store(Request $request, $kelas, $task)
         return redirect()->back()->withErrors('Anda sudah mengirimkan tugas ini.');
     }
 
-    // Simpan file
-    $filePath = $request->file('file')->store('submissions', 'public');
+    // Simpan file ke storage
+    $file = $request->file('file');
+    $fileName = $file->getClientOriginalName(); // Hanya nama file
+    $filePath = $file->storeAs('submissions', $fileName, 'public'); // Simpan dengan nama file asli
 
     // Simpan ke database
     Submission::create([
         'tugas_id' => $task,
         'siswa_id' => $user->id,
-        'file_url' => $filePath,
+        'file_url' => $fileName, // Hanya nama file
     ]);
 
     return redirect()->back()->with('success', 'Tugas berhasil diserahkan.');
@@ -95,26 +97,24 @@ public function destroy($id)
 }
 
 public function update(Request $request, $id)
-{
-    // Validasi input
-    $request->validate([
-        'siswa_id' => 'required|exists:users,id', // Sesuaikan relasi dengan tabel users
-        'nilai' => 'required|numeric|min:0|max:100',
-        'feedback' => 'required|string|max:255',
-    ]);
+    {
+        // Validasi input
+        $request->validate([
+            'nilai' => 'required|numeric|min:0|max:100',
+            'feedback' => 'required|string',
+        ]);
 
-    // Cari record submission berdasarkan ID dan siswa_id
-    $submission = Submission::where('id', $id)
-        ->where('siswa_id', $request->input('siswa_id'))
-        ->firstOrFail();
+        // Cari submission berdasarkan ID
+        $submission = Submission::find($id);
+        if (!$submission) {
+            return response()->json(['message' => 'Submission not found'], 404);
+        }
 
-    // Perbarui data submission
-    $submission->update([
-        'nilai' => $request->input('nilai'),
-        'feedback' => $request->input('feedback'),
-    ]);
+        // Update data submission
+        $submission->nilai = $request->input('nilai');
+        $submission->feedback = $request->input('feedback');
+        $submission->save();
 
-    // Redirect kembali dengan pesan sukses
-    return redirect()->back()->with('success', 'Nilai dan feedback berhasil diperbarui.');
-}
+        return response()->json(['message' => 'Submission updated successfully'], 200);
+    }
 }

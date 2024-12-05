@@ -166,7 +166,7 @@
     const submissionsData = @json($tasks->mapWithKeys(function ($task) {
         return [$task->id => $task->submissions];
     }));
-    
+
     function showTaskContent(taskId) {
         // Hapus warna aktif dari semua ChipContainer
         document.querySelectorAll('.chip-container').forEach(container => {
@@ -192,6 +192,8 @@
                 const row = document.createElement('tr');
                 row.classList.add('border', 'hover:bg-gray-100');
                 
+                const isCompleted = submission.nilai !== null && submission.feedback !== null; // Cek apakah sudah ada nilai dan feedback
+                
                 row.innerHTML = `
                     <td>
                         <div class="p-3 flex items-center">
@@ -203,36 +205,114 @@
                             <p class="ml-3">${submission.user.name}</p>
                         </div>
                     </td>
-
-
-
                     <td>${new Date(submission.created_at).toLocaleString()}</td>
                     <td>
                         <a href="/storage/${submission.file_url}" 
-                           target="_blank" 
-                           class="text-blue-500 underline truncate block max-w-[200px]" 
-                           title="${submission.file_url.split('/').pop()}">
-                           ${submission.file_url.split('/').pop()}
+                            target="_blank" 
+                            class="text-blue-500 underline truncate block max-w-[200px]" 
+                            title="${submission.file_url.split('/').pop()}">
+                            ${submission.file_url.split('/').pop()}
                         </a>
                     </td>
                     <td>
-                        <input type="number" name="nilai" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" placeholder="Masukkan nilai (0-100)" min="0" max="100" value="${submission.nilai ?? ''}" required />
+                        ${
+                            isCompleted
+                                ? `<span>${submission.nilai}</span>` // Field teks jika sudah ada nilai
+                                : `<input type="number" name="nilai" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" placeholder="Masukkan nilai (0-100)" min="0" max="100" value="${submission.nilai ?? ''}" required />`
+                        }
                     </td>
                     <td>
-                        <textarea name="feedback" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" rows="4" placeholder="Masukkan feedback di sini" required>${submission.feedback ?? ''}</textarea>
+                        ${
+                            isCompleted
+                                ? `<span>${submission.feedback}</span>` // Field teks jika sudah ada feedback
+                                : `<textarea name="feedback" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" rows="4" placeholder="Masukkan feedback di sini" required>${submission.feedback ?? ''}</textarea>`
+                        }
                     </td>
                     <td class="text-center">
-                        <form action="/submission/${submission.id}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <button type="submit" class="bg-blue-500 px-5 py-2 text-white rounded-xl">Kirim</button>
-                        </form>
+                        ${
+                            isCompleted
+                                ? `<button type="button" class="bg-yellow-500 px-5 py-2 text-white rounded-xl edit-button" data-id="${submission.id}">Edit</button>` // Tombol edit
+                                : `<button type="button" class="bg-blue-500 px-5 py-2 text-white rounded-xl submit-button" data-id="${submission.id}">Kirim</button>` // Tombol kirim
+                        }
                     </td>
                 `;
                 tableBody.appendChild(row);
             });
+
+            // Event listener untuk tombol "Kirim"
+            document.querySelectorAll('.submit-button').forEach(button => {
+                button.addEventListener('click', function () {
+                    const submissionId = this.getAttribute('data-id');
+                    const row = this.closest('tr');
+                    const nilai = row.querySelector('input[name="nilai"]').value;
+                    const feedback = row.querySelector('textarea[name="feedback"]').value;
+
+                    const data = { nilai, feedback };
+
+                    // Kirim data ke server
+                    fetch(`/submission/${submissionId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        alert('Data berhasil dikirim!');
+                        showTaskContent(taskId); // Refresh tabel
+                    })
+                    .catch(error => {
+                        alert('Terjadi kesalahan: ' + error.message);
+                    });
+                });
+            });
+
+            // Event listener untuk tombol "Edit"
+            document.querySelectorAll('.edit-button').forEach(button => {
+                button.addEventListener('click', function () {
+                    const submissionId = this.getAttribute('data-id');
+                    const row = this.closest('tr');
+                    
+                    // Ubah field nilai dan feedback jadi input kembali
+                    const nilai = row.querySelector('td:nth-child(4) span').textContent;
+                    const feedback = row.querySelector('td:nth-child(5) span').textContent;
+
+                    row.querySelector('td:nth-child(4)').innerHTML = `<input type="number" name="nilai" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" value="${nilai}" />`;
+                    row.querySelector('td:nth-child(5)').innerHTML = `<textarea name="feedback" class="border-gray-300 border-2 rounded-lg py-2 px-2 w-full" rows="4">${feedback}</textarea>`;
+
+                    // Ubah tombol Edit jadi Kirim
+                    this.outerHTML = `<button type="button" class="bg-blue-500 px-5 py-2 text-white rounded-xl submit-button" data-id="${submissionId}">Kirim</button>`;
+
+                    // Tambahkan event listener untuk tombol Kirim baru
+                    document.querySelector('.submit-button').addEventListener('click', function () {
+                        const nilai = row.querySelector('input[name="nilai"]').value;
+                        const feedback = row.querySelector('textarea[name="feedback"]').value;
+
+                        const data = { nilai, feedback };
+
+                        // Kirim data ke server
+                        fetch(`/submission/${submissionId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify(data)
+                        })
+                        .then(response => response.json())
+                        .then(result => {
+                            alert('Data berhasil diperbarui!');
+                            showTaskContent(taskId); // Refresh tabel
+                        })
+                        .catch(error => {
+                            alert('Terjadi kesalahan: ' + error.message);
+                        });
+                    });
+                });
+            });
         } else {
-            // Show no data message
             tableBody.innerHTML = `
                 <tr>
                     <td colspan="6" class="text-center py-3 text-gray-500">
