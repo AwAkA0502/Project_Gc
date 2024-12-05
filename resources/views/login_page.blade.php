@@ -57,10 +57,12 @@
                 Gak punya akun?
                 <a href="{{ route('register') }}" class="text-base" style="color: #064420;">Daftar Disini</a>
             </p>
-            <p class="mt-2">
+
+            <!-- <p class="mt-2">
                 Ganti password?
                 <a href="{{ route('change_password') }}" class="text-blue-600">Ganti Password</a>
-            </p>
+            </p> -->
+            
         </div>
     </div>
     <script>
