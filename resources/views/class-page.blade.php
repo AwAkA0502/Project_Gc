@@ -339,7 +339,8 @@
                                 <div class="flex justify-between border-b pb-3">
                                     <h1 class="text-xl font-medium">Siswa</h1>
                                     <div class="flex gap-3">
-                                        <p class="text-md"><span>{{ $kelas->users->count() }}</span> Siswa</p>                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        <p class="text-md"><span>{{ $kelas->users->count() }}</span> Siswa</p>                                            
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                                     stroke-linecap="round" stroke-linejoin="round"
                                                     class="icon icon-tabler icons-tabler-outline icon-tabler-user-plus">
