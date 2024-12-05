@@ -42,7 +42,7 @@
         </form>
         <div class="flex gap-1 justify-center items-center">
             <p class="text-white text-base">Sudah Punya Akun? 
-                <a href="{{ route('login') }}" class="text-base" style="color: #064420;">Daftar Disini</a>
+                <a href="{{ route('login') }}" class="text-base" style="color: #064420;">Login</a>
             </p>
         </div>
     </div>
