@@ -38,16 +38,18 @@ class ClassController extends Controller
 public function nilai($id)
 {
     $user = auth()->user();
-
     $kelas = Kelas::with(['tasks.submissions.user'])->findOrFail($id);
 
     $isTeacher = $kelas->guru_id === $user->id;
 
-    $tasks = $kelas->tasks->map(function ($task) {
+    $tasks = $kelas->tasks()->orderBy('created_at', 'desc')->get()->map(function ($task) {
         $task->submissions = $task->submissions->map(function ($submission) {
             return [
-                'id' => $submission->id, // Tambahkan id di array
-                'user' => $submission->user->name ?? 'Tidak diketahui',
+                'id' => $submission->id,
+                'user' => [
+                    'name' => $submission->user->name ?? 'Tidak diketahui',
+                    'profile_picture' => $submission->user->profile_picture ?? '/Assets/User_Profile2.jpg',
+                ],
                 'created_at' => $submission->created_at,
                 'file_url' => $submission->file_url,
                 'nilai' => $submission->nilai,
@@ -63,6 +65,8 @@ public function nilai($id)
 
     return view('class.nilai', compact('kelas', 'tasks', 'submissions', 'isTeacher'));
 }
+
+
 
     public function create(Request $request)
     {

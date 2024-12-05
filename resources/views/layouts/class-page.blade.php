@@ -10,7 +10,7 @@
     <title>File Upload</title>
 </head>
 
-<body class="bg-white h-screen overflow-y-hidden flex flex-col">
+<body class="h-screen overflow-y-hidden flex flex-col bg-[#E0FBE2]">
     <section id="Content" class="flex h-screen">
         @include('partials.sidebar') <!-- Memanggil partial sidebar.blade.php -->
 

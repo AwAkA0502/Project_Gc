@@ -52,6 +52,8 @@ Route::prefix('submissions')->group(function () {
 Route::prefix('tasks')->group(function () {
     Route::post('/kelas/{kelas}', [TaskController::class, 'store'])->middleware('auth')->name('task.store');
     Route::delete('/{task}', [TaskController::class, 'destroy'])->middleware('auth')->name('task.destroy');
+    Route::get('/tasks/{taskId}/submissions', [SubmissionController::class, 'getSubmissions'])->name('task.submissions');
+
 });
 
 // General Routes

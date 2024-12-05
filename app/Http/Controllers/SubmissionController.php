@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\Auth; // Tambahkan ini
 
 class SubmissionController extends Controller
 {
+    public function getSubmissions($taskId)
+{
+    $task = Task::findOrFail($taskId);
+    $submissions = Submission::with('user')->where('tugas_id', $taskId)->get();
+
+    return view('components.task-content', compact('submissions', 'task'));
+}
+
+
     public function index($id)
 {
     // Ambil data submissions berdasarkan ID kelas

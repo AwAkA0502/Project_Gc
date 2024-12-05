@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Submission extends Model
 {
-    public function user()
+// Model Submission
+public function user()
 {
-    return $this->belongsTo(User::class, 'siswa_id'); // Kolom siswa_id mengacu ke tabel users
+    return $this->belongsTo(User::class, 'siswa_id');
 }
 
 public function tugas()
