@@ -134,6 +134,23 @@
                 </div>
                 @endif
             </div>
+            <div class="flex flex-col gap-6 px-3 py-5 rounded-xl border border-[#618264] w-full">
+                    <div class="flex gap-2">
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#064420"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-user"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
+                        <p class="text-sm text-[#064420]">1 komentar pribadi</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="w-[50px] h-[50px] rounded-full bg-[#B3C6B5]"> </div>
+                        <div class="flex flex-col gap-1">
+                            <p>Nama 22.02</p>
+                            <p>ok</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 justify-center items-center">
+                        <input type="text" placeholder="Tambahkan komentar pribadi ..." class=" w-full px-4 py-3 rounded-3xl border border-[#618264] text-sm text-white bg-[#779578] ">
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="30"  height="30"  viewBox="0 0 24 24"  fill="none"  stroke="#064420"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-send-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4.698 4.034l16.302 7.966l-16.302 7.966a.503 .503 0 0 1 -.546 -.124a.555 .555 0 0 1 -.12 -.568l2.468 -7.274l-2.468 -7.274a.555 .555 0 0 1 .12 -.568a.503 .503 0 0 1 .546 -.124z" /><path d="M6.5 12h14.5" /></svg>
+                    </div>
+            </div>
             <script>
                 // Menampilkan nama file dan jenis file yang dipilih
                 function displayFileName(event) {
