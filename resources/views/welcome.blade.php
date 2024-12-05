@@ -6,10 +6,8 @@
     <link rel="stylesheet" href="{{ asset('css/output.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/input.css') }}" />
     <title>Halaman Utama</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
+    @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
     <style>
       .background-video {
         position: fixed;

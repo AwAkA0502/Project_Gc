@@ -3,8 +3,12 @@
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
+    "type": "module",
+
     "scripts": {
-        "dev": "npx tailwindcss -i ./resources/static/input.css -o ./resources/static/output.css --watch"
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview"
     },
     "keywords": [],
     "author": "",
@@ -12,12 +16,15 @@
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.9",
         "alpinejs": "^3.4.2",
-        "autoprefixer": "^10.4.2",
-        "postcss": "^8.4.31",
-        "tailwindcss": "^3.1.0"
+        "autoprefixer": "^10.4.20",
+        "laravel-vite-plugin": "^1.1.1",
+        "postcss": "^8.4.49",
+        "tailwindcss": "^3.4.15",
+        "vite": "^6.0.2"
     },
     "dependencies": {
         "axios": "^1.7.2",
-        "project": "file:"
+        "project": "file:",
+        "tailwind-scrollbar": "^3.1.0"
     }
 }

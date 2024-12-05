@@ -46,8 +46,8 @@ class TaskController extends Controller
     public function show($id)
     {
         $kelas = Kelas::with('tasks')->findOrFail($id);
-
-        return view('class-page', compact('kelas'));
+        $tugas = Tugas::with('submissions.user')->findOrFail($id); // Tugas dengan relasi submissions dan user
+        return view('class-page', compact('kelas','tugas'));
     }
 
     public function store(Request $request, $kelas)
@@ -98,7 +98,7 @@ class TaskController extends Controller
     ]);
 
     // Berikan respons JSON atau redirect sesuai kebutuhan
-    return redirect()->route('class.page', ['id' => $kelas])->with('success', 'Tugas berhasil ditambahkan.');
+    return redirect()->route('class.nilai', ['id' => $kelas])->with('success', 'Tugas berhasil ditambahkan.');
 }
 
 public function destroy($id)

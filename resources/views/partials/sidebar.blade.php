@@ -1,9 +1,9 @@
-<div id="Sidebar" class="flex flex-col pt-5 gap-10 rounded-r-3xl" style="width: 400px; background-color: #B0D9B1;">
+<div id="Sidebar" class="flex flex-col pt-5 gap-10 rounded-r-3xl h-full" style="min-width: 260px; background-color: #B0D9B1;">
     <div>
         <!-- LOGO -->
         <img/>
     </div>
-        <div class="flex flex-col gap-3 px-2">
+    <div class="flex flex-col gap-3 px-2">
         <a href="/home" class="flex gap-4 justify-start items-center px-4 py-2 hover:bg-gray-200 rounded-xl">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -37,13 +37,13 @@
             </svg>
             <p class="font-medium" style="color: #064420;">My Course</p>
         </div>
-        <div id="class" class="flex gap-4 justify-start items-center px-4 py-2 bg-gray-300 rounded-xl">
+        {{-- <div id="class" class="flex gap-4 justify-start items-center px-4 py-2 bg-gray-300 rounded-xl">
             <img src="" class="w-7 h-7 bg-gray-700 rounded-full">
             <div class="flex flex-col gap-1">
                 <p class="font-medium text-sm">Matematika Lanjut</p>
                 <p class="text-sm">My Course</p>
             </div>
-        </div>
+        </div> --}}
         <div id="Setting" class="flex gap-4 justify-start items-center px-4 py-2 hover:bg-gray-200 rounded-xl">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke=" #064420" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"

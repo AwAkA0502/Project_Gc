@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="output.css">
     <title>File Upload</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
 </head>
 
 <body class="flex flex-col h-screen" style="background-color: #E0FBE2">
@@ -22,7 +23,7 @@
                                 <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
                         </div>
                         <div class="flex flex-col gap-1">
-                            <h1 class="text-2xl font-medium">{{ $task->judul }}</h1>
+                            <h1 class="text-2xl font-medium text-[#e0fbe2]">{{ $task->judul }}</h1>
                             <p class="opacity-60">
                                 {{ $kelas->guru->name }} • 
                                 <span>{{ \Carbon\Carbon::parse($task->created_at)->format('d M Y H:i') }}</span>
