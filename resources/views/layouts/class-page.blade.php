@@ -10,39 +10,40 @@
     <title>File Upload</title>
 </head>
 
-<body class="h-screen overflow-y-hidden flex flex-col bg-[#E0FBE2]">
+<body class="h-screen overflow-x-hidden flex flex-col bg-[#E0FBE2]">
     <section id="Content" class="flex h-screen">
         @include('partials.sidebar') <!-- Memanggil partial sidebar.blade.php -->
 
-        <div class="flex flex-col w-full gap-5">
-            <div id="MainContent" class="w-full h-fit flex justify-between items-center pr-10 gap-3 border-b border-black">
-                <div id="TabField" class="flex justify-between px-3">
-                    <div class="flex gap-3 relative">
-                        <a href="{{ route('class.forum', $kelas->id) }}" 
-                           class="p-3 {{ Request::is("kelas/{$kelas->id}/forum") ? 'font-bold border-b-2 border-blue-500' : 'font-medium' }}">
-                            Forum
-                        </a>
-                        @if (isset($isTeacher) && $isTeacher)
-                        <a href="{{ route('class.nilai', $kelas->id) }}" 
-                           class="p-3 {{ Request::is("kelas/{$kelas->id}/nilai") ? 'font-bold border-b-2 border-blue-500' : 'font-medium' }}">
-                            Nilai
-                        </a>
-                        @endif
+        <div class="flex flex-col w-full gap-5 p-5">
+            <div class="flex justify-between items-center">
+                <h1 class="font-bold" style="color: #064420; font-size: 32px;">
+                    Hello {{ Auth::user()->name ?? 'Guest' }}
+                </h1>
+                <div class="flex gap-4 justify-center items-center">
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="25"  height="25"  viewBox="0 0 24 24"  fill="#618264"  class="icon icon-tabler icons-tabler-filled icon-tabler-bell"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14.235 19c.865 0 1.322 1.024 .745 1.668a3.992 3.992 0 0 1 -2.98 1.332a3.992 3.992 0 0 1 -2.98 -1.332c-.552 -.616 -.158 -1.579 .634 -1.661l.11 -.006h4.471z" /><path d="M12 2c1.358 0 2.506 .903 2.875 2.141l.046 .171l.008 .043a8.013 8.013 0 0 1 4.024 6.069l.028 .287l.019 .289v2.931l.021 .136a3 3 0 0 0 1.143 1.847l.167 .117l.162 .099c.86 .487 .56 1.766 -.377 1.864l-.116 .006h-16c-1.028 0 -1.387 -1.364 -.493 -1.87a3 3 0 0 0 1.472 -2.063l.021 -.143l.001 -2.97a8 8 0 0 1 3.821 -6.454l.248 -.146l.01 -.043a3.003 3.003 0 0 1 2.562 -2.29l.182 -.017l.176 -.004z" /></svg>
+                    <div class="rounded-full bg-black" style="width: 40px; height: 40px; background-color: #89B88D;"> </div>
+                </div>
+            </div>
+            <div class="flex flex-col">
+            <div id="MainContent" class="flex gap-3 px-10">
+                    <div id="TabField" class="flex gap-3 px-10">
+                        <div class="flex gap-3 relative">
+                            <a href="{{ route('class.forum', $kelas->id) }}" 
+                            class="p-3 px-5 py-3 font-semibold text-white text-base cursor-pointer rounded-t-2xl border" style="background-color: #618264; border-color: #618264; {{ Request::is("kelas/{$kelas->id}/forum") ? 'font-bold border-b-2 border-blue-500' : 'font-medium' }}">
+                                Forum
+                            </a>
+                            @if (isset($isTeacher) && $isTeacher)
+                            <a href="{{ route('class.nilai', $kelas->id) }}" 
+                            class="p-3 px-5 py-3 font-semibold text-base cursor-pointer rounded-t-2xl border" style="text-color:#618264; border-color: #618264; {{ Request::is("kelas/{$kelas->id}/nilai") ? 'font-bold border-b-2 border-blue-500' : 'font-medium' }}">
+                                Nilai Tugas
+                            </a>
+                            @endif
+                        </div>
                     </div>
                 </div>
-                <button type="button">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="icon icon-tabler icons-tabler-outline icon-tabler-settings-2">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path
-                            d="M19.875 6.27a2.225 2.225 0 0 1 1.125 1.948v7.284c0 .809 -.443 1.555 -1.158 1.948l-6.75 4.27a2.269 2.269 0 0 1 -2.184 0l-6.75 -4.27a2.225 2.225 0 0 1 -1.158 -1.948v-7.285c0 -.809 .443 -1.554 1.158 -1.947l6.75 -3.98a2.33 2.33 0 0 1 2.25 0l6.75 3.98h-.033z" />
-                        <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-                    </svg>
-                </button>
-            </div>
-            <div id="ContentField" class="w-full h-full pb-10">
-                 @yield('content')
+                <div id="ContentField" class=" flex flex-col w-full h-full border border-[#618264] rounded-[20px] gap-5 p-10">
+                    @yield('content')
+                </div>
             </div>
         </div>
     </section>
