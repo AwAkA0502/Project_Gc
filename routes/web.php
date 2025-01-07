@@ -33,11 +33,13 @@ Route::prefix('kelas')->group(function () {
     Route::post('/create', [ClassController::class, 'create'])->name('create.class');
     Route::get('/my-classes', [ClassController::class, 'getMyClasses'])->name('my.classes');
     Route::get('/class-list', [ClassController::class, 'index'])->name('class.list');
-    Route::get('/class-page/{id}', [ClassController::class, 'show'])->name('class.page');
+    Route::get('/class-page/{id}/forum', [ClassController::class, 'forum'])->name('class.forum');
+    Route::get('/class-page/{id}/nilai', [ClassController::class, 'nilai'])->name('class.nilai');
 
-    // Tambahkan rute untuk forum dan nilai
-    Route::get('/{id}/forum', [ClassController::class, 'forum'])->name('class.forum');
-    Route::get('/{id}/nilai', [ClassController::class, 'nilai'])->name('class.nilai');
+
+    // // Tambahkan rute untuk forum dan nilai
+    // Route::get('/{id}/forum', [ClassController::class, 'forum'])->name('class.forum');
+    // Route::get('/{id}/nilai', [ClassController::class, 'nilai'])->name('class.nilai');
 });
 
 // Submission Routes

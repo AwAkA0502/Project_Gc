@@ -28,7 +28,7 @@
                     <div id="cardsContainer" class="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                         @if(isset($classes) && $classes->isNotEmpty())
                             @foreach ($classes as $kelas)
-                                <a href="{{ route('class.page', ['id' => $kelas->id]) }}" class="no-underline">
+                                <a href="{{ route('class.forum', ['id' => $kelas->id]) }}" class="no-underline">
                                     <div class="flex flex-col gap-3 pl-3 pr-2 pt-2 pb-3 rounded-xl" style="background-color: #D0E7D2;">
                                         <!-- Header -->
                                         <div class="flex px-1 py-2 justify-between border-b" style="border-color: #618264;">

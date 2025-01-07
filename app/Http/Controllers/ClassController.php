@@ -42,7 +42,9 @@ public function nilai($id)
 
     $isTeacher = $kelas->guru_id === $user->id;
 
+    // Map tugas dengan data submission dan jumlah submission
     $tasks = $kelas->tasks()->orderBy('created_at', 'desc')->get()->map(function ($task) {
+        $task->submission_count = $task->submissions->count(); // Hitung jumlah submissions
         $task->submissions = $task->submissions->map(function ($submission) {
             return [
                 'id' => $submission->id,
@@ -59,6 +61,7 @@ public function nilai($id)
         return $task;
     });
 
+    // Flatten submissions untuk memudahkan akses
     $submissions = $tasks->flatMap(function ($task) {
         return $task->submissions;
     });
@@ -162,7 +165,7 @@ public function show($id)
         }
     }
 
-    return view('class.forum', [
+    return view('layouts.class-page', [
         'kelas' => $kelas,
         'isTeacher' => $isTeacher,
         'tasks' => $tasks,

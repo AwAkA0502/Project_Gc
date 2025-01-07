@@ -6,31 +6,44 @@
 @section('nilai-tab-border', 'border-blue-500')
 
 @section('content')
-<div id="nilaiContent" class="tab-content flex flex-col gap-1 px-4">
-    <div id="Chip_Field" class="flex gap-3">
+<div id="nilaiContent" class="tab-content flex flex-col gap-1 px-4 w-fit">
+
+    <div id="Chip_Field" class="flex gap-3 overflow-x-auto max-w-full">
         @foreach ($tasks as $task)
-        <div id="ChipContainer-{{ $task->id }}" class="chip-container justify-center items-center flex gap-2 bg-green-800 rounded-xl px-2">
-            <button id="Chip-{{ $task->id }}" class="chip flex justify-center items-center px-3 py-2 rounded-xl" onclick="showTaskContent('{{ $task->id }}')">
-                <p class="text-white font-medium">{{ $task->judul }}</p>
-            </button>
+        <div id="ChipContainer-{{ $task->id }}" class="chip-container w-fit justify-center items-center flex gap-2 rounded-xl pr-2">
+            <div class="w-[12px] h-full bg-[#043007] rounded-l-full"> </div>
+            <div class="w-12 h-12 flex bg-[#819B83] rounded-full items-center justify-center">
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="30"  height="30"  viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
+            </div>
+            <button id="Chip-{{ $task->id }}" class="chip flex flex-col justify-center items-start px-3 py-2 rounded-xl gap-1" onclick="showTaskContent('{{ $task->id }}')">
+                <div class="flex gap-3 justify-center items-center">
+                    <p class="text-white font-medium">{{ $task->judul }}</p>
+                    <div class="flex gap-1 justify-center items-center">
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="16"  height="16"  viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-users"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
+                        <p class="text-white">{{ $task->submission_count }}</p>
+                    </div>
+                </div>
+                <p class="text-white text-sm text-start min-w-[150px]">Deadline: {{ \Carbon\Carbon::parse($task->deadline)->format('Y-m-d') }}</p>            </button>
 
             <!-- Tombol Delete -->
             <form method="POST" action="{{ route('task.destroy', ['task' => $task->id]) }}" onsubmit="return confirm('Hapus tugas ini?')">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="border-none text-white rounded-lg hover:bg-red-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M18 6l-12 12" />
-                        <path d="M6 6l12 12" />
-                    </svg>
-                </button>
+                <div class="flex mb-9">
+                    <button type="submit" class="border-none text-white rounded-l">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M18 6l-12 12" />
+                            <path d="M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
             </form>
         </div>
         @endforeach
     
         @if ($isTeacher)
-        <button id="NewTask" class="flex justify-center items-center px-3 py-2 border rounded-xl gap-2 bg-blue-500 text-white" onclick="createNewTask()">
+        <button id="NewTask" class="flex justify-center items-center px-3 py-2 border rounded-xl gap-2 bg-[#043007] text-white" onclick="createNewTask()">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path d="M12 5l0 14" />
@@ -104,9 +117,9 @@
             </button>
         </div>
         <!-- Include komponen task-content -->
-        <div id="Content_Tugas" class="content overflow-auto border-gray-300 border-2 rounded-xl shadow-lg">
+        <div id="Content_Tugas" class="content overflow-auto  rounded-xl shadow-lg">
             <table id="submissionTable" class="table-fixed w-full">
-                <thead class="text-left bg-gray-200">
+                <thead class="text-left bg-[#89B88D]">
                     <tr>
                         <th class="py-3 px-3">Nama User</th>
                         <th class="py-3">Tanggal Upload</th>
@@ -170,14 +183,14 @@
     function showTaskContent(taskId) {
         // Hapus warna aktif dari semua ChipContainer
         document.querySelectorAll('.chip-container').forEach(container => {
-            container.classList.remove('bg-blue-500'); // Warna aktif
-            container.classList.add('bg-green-800'); // Warna default
+            container.classList.remove('bg-[#7BC682]'); // Warna aktif
+            container.classList.add('bg-[#89B88D]'); // Warna default
         });
 
         // Tambahkan warna aktif pada ChipContainer yang dipilih
         const selectedContainer = document.getElementById(`ChipContainer-${taskId}`);
-        selectedContainer.classList.remove('bg-green-800'); // Hilangkan warna default
-        selectedContainer.classList.add('bg-blue-500'); // Tambahkan warna aktif
+        selectedContainer.classList.remove('bg-[#89B88D]'); // Hilangkan warna default
+        selectedContainer.classList.add('bg-[#7BC682]'); // Tambahkan warna aktif
 
         // Memperbarui konten tabel dengan data submission tugas yang dipilih
         const submissions = submissionsData[taskId];
@@ -190,7 +203,7 @@
         if (submissions && submissions.length > 0) {
             submissions.forEach(submission => {
                 const row = document.createElement('tr');
-                row.classList.add('border', 'hover:bg-gray-100');
+                row.classList.add('border', 'hover:bg-green-300');
                 
                 const isCompleted = submission.nilai !== null && submission.feedback !== null; // Cek apakah sudah ada nilai dan feedback
                 
